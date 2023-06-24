@@ -1,13 +1,21 @@
+import os
+
 from fastapi import FastAPI
 
-app = FastAPI()
+from routers import chat
+
+debug = os.getenv('debug', True)
+
+app = FastAPI(debug=debug)
+
+app.include_router(chat.router, prefix='/chat')
 
 
-@app.get("/")
+@app.get('/')
 async def root():
-    return {"message": "Hello World"}
+    return {'message': 'AI Chat is up'}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+@app.get('/health')
+async def health():
+    return {'status': 'ok'}
