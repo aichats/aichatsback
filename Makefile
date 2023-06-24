@@ -15,7 +15,7 @@ run:
 
 install-tests:
 	@ python -m pip install -r requirements-test.txt
- 
+
 test:
 	@pytest -p no:cacheprovider
 	@echo "testing complete"
@@ -24,5 +24,6 @@ clean:
 	@echo "cleaning"
 	@find . -type d -name '.pytest_cache' -exec rm -rf {} +
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
+	@find . -type d -name '__pycache__' -exec rm -rf {} +
 
 .PHONY: run install clean setup test
