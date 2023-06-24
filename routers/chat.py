@@ -18,7 +18,7 @@ router = APIRouter(tags=['chat'])
 
 
 @dataclasses.dataclass
-class Message():
+class Message:
     message: str = None
     chat_id: int = None
     attachments: UploadFile = None

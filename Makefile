@@ -11,7 +11,7 @@ install:
 	@ pip install -r requirements.txt
 
 run:
-	@python -m streamlit run app.py
+	@python -m uvicorn app:app --port 1605
 
 install-tests:
 	@ python -m pip install -r requirements-test.txt

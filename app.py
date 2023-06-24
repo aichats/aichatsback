@@ -1,7 +1,10 @@
 import config
 import middlewares
-from config.constants import MODE, PRODUCTION
+from config.constants import INDEX_NAME, MODE, PRODUCTION
 from fastapi import FastAPI
+from icecream import ic
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import Pinecone
 from middlewares import health
 from routers import chat
 
@@ -17,6 +20,12 @@ middlewares.setup_middlewares(app)
 @app.on_event('startup')
 async def startup():
     app.debug = MODE != PRODUCTION
+    embeddings = OpenAIEmbeddings()
+    vectorstore = Pinecone.from_existing_index(
+        index_name=INDEX_NAME, embedding=embeddings,
+    )
+    ic(vectorstore)
+    ic('startup complete')
 
 
 @app.get('/')

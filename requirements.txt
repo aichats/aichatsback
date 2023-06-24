@@ -7,7 +7,6 @@ h11~=0.14.0
 httpx
 icecream~=2.1.3
 langchain~=0.0.212
-numpy
 
 openai~=0.27.8
 pinecone-client
@@ -18,6 +17,7 @@ python-dotenv~=1.0.0
 python-multipart
 requests~=2.31.0
 starlette~=0.27.0
+tiktoken
 typing
 uvicorn~=0.22.0
 validators
