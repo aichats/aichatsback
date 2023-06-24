@@ -1,3 +1,7 @@
-import logging
+from config import log, open_ai, pinecone
 
-alog = logging.getLogger('app')
+
+def setup():
+    log.setup()
+    pinecone.setup()
+    open_ai.setup()

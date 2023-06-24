@@ -26,7 +26,7 @@ def get_text_chunk(text):
     return docs
 
 
-def upsert(data) -> Pinecone:
+def insert(data) -> Pinecone:
     embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM)
 
     #   will not to use vector in memory today.

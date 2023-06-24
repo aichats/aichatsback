@@ -1,24 +1,31 @@
-import os
+import logging
+
+import middlewares
+from config import log
+from config.constants import MODE, PRODUCTION
 
 from fastapi import FastAPI
-
+from icecream import ic
+from middlewares import health
 from routers import chat
 
-debug = os.getenv('debug', True)
-
-app = FastAPI(debug=debug)
-
+app = FastAPI(debug=False)
 app.include_router(chat.router, prefix='/chat')
+app.include_router(health.router)
+
+log.setup()
+
+middlewares.setup_middlewares(app)
+
+
+@app.on_event('startup')
+async def startup():
+    app.debug = MODE != PRODUCTION
 
 
 @app.get('/')
 async def root():
     return {'message': 'AI Chat is up'}
-
-
-@app.get('/health')
-async def health():
-    return {'status': 'ok'}
 
 
 if __name__ == '__main__':

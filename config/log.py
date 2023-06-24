@@ -9,7 +9,7 @@ def _prefix_time():
     return f"info | {time.strftime('%X')} | "
 
 
-def setup_log():
+def setup():
     log_config.fileConfig(
         fname='config/log_config.ini',
         disable_existing_loggers=True,

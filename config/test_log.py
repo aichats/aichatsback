@@ -6,9 +6,9 @@ from pathlib import Path
 import pytest
 from icecream import ic
 
-from .log import setup_log
+from .log import setup
 
-setup_log()
+setup()
 
 alog = getLogger('app')
 

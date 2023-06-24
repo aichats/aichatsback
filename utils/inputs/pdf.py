@@ -6,9 +6,7 @@ from langchain.schema import Document
 from pypdf import PdfReader
 
 
-def extract(pdf_docs: str | IO | Path | List[Document]) -> str:
-    if isinstance(pdf_docs, str):
-        pdf_docs = [pdf_docs]
+def extract(*pdf_docs: str | IO | Path | List[Document]) -> str:
 
     text = ''
     for pdf in pdf_docs:
