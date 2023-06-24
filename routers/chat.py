@@ -2,7 +2,7 @@ import dataclasses
 import http
 import shutil
 from http.client import HTTPException
-from typing import List
+from typing import List, TypeVar
 
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
@@ -16,12 +16,16 @@ from utils.inputs.html import extract
 
 router = APIRouter(tags=['chat'])
 
+SENDER = TypeVar('SENDER', str, str)
+BOT: SENDER = 'bot'
+USER: SENDER = 'user'
+
 
 @dataclasses.dataclass
 class Message:
-    message: str = None
+    sender: BOT | USER | SENDER
+    message: str
     chat_id: int = None
-    attachments: UploadFile = None
 
 
 @router.get('/')
@@ -37,7 +41,7 @@ async def get(chat_id: int):
 @router.post('/')  # TODO:
 async def create(msg: Message):
     new_chat_id: int = msg.chat_id or '1'
-    answer = Message(msg.message, new_chat_id)
+    answer = Message(BOT, msg.message, new_chat_id)
 
     return {'message': answer}
 
