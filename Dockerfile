@@ -27,4 +27,4 @@ COPY . .
 
 RUN sed -i 's/\(runOnSave =\).*/\1 false/' .streamlit/config.toml
 
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "1605","--workers","4"]
+ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "1605","--workers","4"]
