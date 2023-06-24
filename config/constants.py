@@ -14,7 +14,7 @@ MODE: Final[str] = os.getenv('mode', DEVELOPMENT)
 
 PINECONE_API_KEY: Final[str] = environ['PINECONE_API_KEY'].strip()
 PINECONE_API_ENV: Final[str] = environ['PINECONE_API_ENV'].strip()
-INDEX_NAME: Final[str] = os.getenv('INDEX_NAME', 'langchaintest').strip()
+INDEX_NAME: Final[str] = os.getenv('INDEX_NAME', 'aichat').strip()
 
 OPENAI_API_KEY: Final[str] = environ['OPENAI_API_KEY'].strip()
 OPENAI_EMBEDDINGS_LLM: Final[str] = os.getenv(
