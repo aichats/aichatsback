@@ -3,6 +3,8 @@ dask
 dask[distributed]
 fastapi
 gTTS
+
+gunicorn
 h11
 httpx
 icecream

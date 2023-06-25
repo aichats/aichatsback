@@ -15,7 +15,7 @@ setup:
 	pre-commit install
 	python -m venv venv
 	$(venv_activate)
-
+	pip install -r requirements-test.txt
 	pre-commit autoupdate
 
 install:
