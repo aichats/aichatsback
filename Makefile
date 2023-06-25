@@ -38,4 +38,14 @@ clean:
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 
+docker:
+	@echo "docker building"
+	docker build . -t aichats
+
+deploy:
+	docker build -t laciferin/aichats .
+	docker login -u laciferin
+	docker push laciferin/aichats:latest
+
+
 .PHONY: run install clean setup test
