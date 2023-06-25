@@ -104,7 +104,7 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
         # Upsert data to the VectorStore
         insert(doc)
 
-        return {'message': 'Uploaded successfully', 'chat_id': chat_id}
+        return Message(BOT, 'uploaded successfully', chat_id)
     except Exception as e:
         return ErrorMessage(e)  # TODO:Define error format dataclass
 
