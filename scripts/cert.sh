@@ -3,6 +3,9 @@ sudo apt install software-properties-common -y
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt update -y
+sudo apt install python3-certbot-nginx
+
+sudo cp ~/aichat/scripts/nginx.conf /etc/nginx
 
 sudo apt install certbot -y
 
