@@ -1,5 +1,17 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "20mb",
+        "pythonVersion": "3.11.x",
+        "buildCommand": "make install && python -m compileall .",
+        "installCommand": "make install"
+      }
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
