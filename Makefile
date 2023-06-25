@@ -11,6 +11,7 @@ else
 endif
 
 setup:
+	pip install virtualenv
 	python -m venv venv
 	$(venv_activate)
 	pip install -r requirements-test.txt
