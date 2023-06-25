@@ -15,9 +15,9 @@ setup:
 	$(venv_activate)
 	pip install -r requirements-test.txt
 
-pre-commits:
-	pre-commit install
-	pre-commit autoupdate
+#pre-commits:
+#	pre-commit install
+#	pre-commit autoupdate
 
 install:
 	@ pip install --upgrade pip
