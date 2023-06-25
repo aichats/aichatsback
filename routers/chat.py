@@ -45,7 +45,7 @@ async def create(msg: Message):
     new_chat_id: int = msg.chat_id or 1
 
     response = openai.Completion.create(
-        engine='text-davinci-003',  # Specify the GPT-3.5 model
+        engine='text-davinci-003',
         prompt='',
         max_tokens=100,  # Set the maximum number of tokens in the response
         n=1,  # Set the number of completions to generate
