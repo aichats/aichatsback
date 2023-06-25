@@ -44,6 +44,7 @@ clean:
 docker:
 	@echo "docker building"
 	docker build . -t aichats
+	docker run -p 80:1605  aichat
 
 compose:
 	docker-compose up --build --force-recreate
