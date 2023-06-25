@@ -19,12 +19,7 @@ setup:
 #	pip install pre-commit
 #	pre-commit install
 #	pre-commit autoupdate
-ec2:
-	sudo apt update
-	sudo apt install python3-pip
-	alias python=python3
-	sudo make install
-	sudo make run
+
 
 
 install:
