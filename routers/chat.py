@@ -38,7 +38,7 @@ async def get(chat_id: int):
     return {'message': f'chat id {chat_id}'}
 
 
-@router.post('/')  # TODO:
+@router.post('/')
 async def create(msg: Message):
     new_chat_id: int = msg.chat_id or '1'
     answer = Message(BOT, msg.message, new_chat_id)
@@ -73,11 +73,12 @@ async def upload(chat_id: int, file: UploadFile):  # TODO: support multiple
     except Exception as e:
         return {'error': str(e)}
 
-# @router.put('/{chat_id}') #TODO:
-# async def upsert(chat_id: int, msg: Message):
-#     return {'message': f'chat {chat_id} updated'}
-#
-#
+
+@router.put('/{chat_id}')  # TODO:
+async def upsert(chat_id: int, msg: Message):
+    msg.chat_id |= chat_id
+    return create(msg)
+
 # @router.delete('/{chat_id}')  # TODO:
 # async def delete(chat_id: int):
 #     return {'message': f'chat id {chat_id} deleted'}
