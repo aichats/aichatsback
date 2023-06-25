@@ -62,3 +62,4 @@ You can modify this file as per your specific requirements.
 # Audio Buffer obj
 <_io.BytesIO object at*
 *.mp3
+.vercel
