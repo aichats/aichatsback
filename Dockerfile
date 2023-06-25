@@ -11,6 +11,12 @@ RUN pip install -r requirements.txt
 FROM python:3.10-slim
 
 ENV mode=production
+ENV PINECONE_API_KEY=""
+ENV PINECONE_API_ENV=""
+ENV OPENAI_API_KEY=""
+ENV OPENAI_EMBEDDINGS_LLM=text-embedding-ada-002
+ENV OPENAI_CHAT_MODEL=gpt-3.5-turbo
+ENV INDEX_NAME=aichat
 
 EXPOSE 1605
 

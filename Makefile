@@ -38,6 +38,15 @@ clean:
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 
+build-env:
+	echo "PINECONE_API_KEY=$PINECONE_API_KEY" >> .env
+	echo "PINECONE_API_ENV=$PINECONE_API_ENV" >> .env
+	echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+	echo "OPENAI_EMBEDDINGS_LLM=$OPENAI_EMBEDDINGS_LLM" >> .env
+	echo "OPENAI_CHAT_MODEL=$OPENAI_CHAT_MODEL" >> .env
+	echo "INDEX_NAME=$INDEX_NAME" >> .env
+	echo "MODE=$MODE" >> .env
+
 docker:
 	@echo "docker building"
 	docker build . -t aichats
