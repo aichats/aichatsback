@@ -1,9 +1,21 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "20mb",
+        "pythonVersion": "3.11.x",
+        "buildCommand": "pip install -r requirements.txt && python -m compileall .",
+        "installCommand": "pip install -r requirements.txt"
+      }
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": "./app.py"
     }
   ]
 }
