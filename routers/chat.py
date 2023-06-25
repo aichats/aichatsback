@@ -74,6 +74,9 @@ async def upload(chat_id: int, file: UploadFile):  # TODO: support multiple
         )
         return res
 
+    if chat_id == 0:
+        chat_id = 1
+
     if file.content_type != 'application/pdf':
         return ErrorMessage('Only pdf files are supported', chat_id)
 

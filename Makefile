@@ -1,8 +1,20 @@
+venv_activate :=
+system := $(shell uname -s)
+
+# Set the virtual environment activation command based on the system type
+ifeq ($(system),Darwin)  # Mac
+	venv_activate := source venv/bin/activate
+else ifeq ($(system),Linux)
+	venv_activate := . venv/bin/activate
+else
+	$(error Unsupported operating system: $(system))
+endif
+
 setup:
 	pip install pre-commit
 	pre-commit install
 	python -m venv venv
-	source venv/bin/activate
+	$(venv_activate)
 
 	pre-commit autoupdate
 
