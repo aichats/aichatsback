@@ -1,6 +1,7 @@
 import dataclasses
 import http
 import shutil
+from functools import cache
 from http.client import HTTPException
 from typing import List, TypeVar
 from uuid import uuid4
@@ -13,6 +14,7 @@ from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from h11 import Response
 from icecream import ic
+from langchain import ConversationChain, OpenAI
 from pydantic import BaseModel
 from utils.ai.open_ai import get_text_chunk, insert
 from utils.cache import Cache
@@ -27,9 +29,10 @@ SENDER = TypeVar('SENDER', str, str)
 BOT: SENDER = 'bot'
 USER: SENDER = 'user'
 
-cachedConversation = Cache(
-    maxsize=10000, ttl=deltaTime(min=20).total_seconds(),
-)
+
+# cache = Cache(
+#     maxsize=10000, ttl=deltaTime(min=20).total_seconds(),
+# )
 
 
 @dataclasses.dataclass
@@ -54,20 +57,22 @@ async def get_list():  # TODO:
 # async def get(chat_id: str):
 #     return {'message': f'chat id {chat_id}'}
 
+@cache
+def get_conversation(chat_id: str) -> ConversationChain:
+    # conversation = cache.get(chat_id)
+    # if conversation is not None: return conversation
+
+    llm = OpenAI(temperature=0)
+    conversation = ConversationChain(llm=llm, verbose=True)
+    return conversation
+
 
 @router.post('/')
 async def create(msg: Message):
-    new_chat_id = msg.chat_id or uuid4()
+    answer = Message(BOT, None, msg.chat_id or uuid4())
 
-    response = openai.Completion.create(
-        engine='text-davinci-003',  # TODO:configurable
-        prompt='',
-        max_tokens=100,  # Set the maximum number of tokens in the response
-        n=1,  # Set the number of completions to generate
-        stop=None,  # Specify an optional stopping criterion
-    )
-
-    answer = Message(BOT, response.choices[0].text.strip(), new_chat_id)
+    conversation = get_conversation(answer.chat_id)
+    answer.message = conversation.predict(input=msg.message)
 
     return answer
 
