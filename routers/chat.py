@@ -4,12 +4,14 @@ import shutil
 from http.client import HTTPException
 from typing import List, TypeVar
 
+import openai
+
+from config.constants import OPENAI_CHAT_MODEL
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from h11 import Response
 from icecream import ic
 from pydantic import BaseModel
-
 from utils.ai.open_ai import get_text_chunk, insert
 from utils.inputs import pdf
 from utils.inputs.html import extract
@@ -23,7 +25,7 @@ USER: SENDER = 'user'
 
 @dataclasses.dataclass
 class Message:
-    sender: BOT | USER | SENDER
+    sender: SENDER
     message: str
     chat_id: int = None
 
@@ -40,8 +42,17 @@ async def get(chat_id: int):
 
 @router.post('/')
 async def create(msg: Message):
-    new_chat_id: int = msg.chat_id or '1'
-    answer = Message(BOT, msg.message, new_chat_id)
+    new_chat_id: int = msg.chat_id or 1
+
+    response = openai.Completion.create(
+        engine='text-davinci-003',  # Specify the GPT-3.5 model
+        prompt='',
+        max_tokens=100,  # Set the maximum number of tokens in the response
+        n=1,  # Set the number of completions to generate
+        stop=None,  # Specify an optional stopping criterion
+    )
+
+    answer = Message(BOT, response.choices[0].text.strip(), new_chat_id)
 
     return {'message': answer}
 
