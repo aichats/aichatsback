@@ -11,11 +11,12 @@ else
 endif
 
 setup:
-	pip install pre-commit
-	pre-commit install
 	python -m venv venv
 	$(venv_activate)
 	pip install -r requirements-test.txt
+
+pre-commits:
+	pre-commit install
 	pre-commit autoupdate
 
 install:
