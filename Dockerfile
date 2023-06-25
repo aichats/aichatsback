@@ -25,4 +25,4 @@ RUN if [ "$mode" = "testing" ]; then pip install -r requirements-test.txt; fi
 
 COPY . .
 
-ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "1605","--workers","4"]
+ENTRYPOINT ["python","-m","uvicorn", "app:app", "--host", "0.0.0.0", "--port", "1605","--workers","4"]
