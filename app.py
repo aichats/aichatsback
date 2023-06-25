@@ -7,6 +7,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
 from middlewares import health
 from routers import chat
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI(debug=False)
 app.include_router(chat.router, prefix='/chat')
@@ -15,6 +16,15 @@ app.include_router(health.router)
 config.setup()
 
 middlewares.setup_middlewares(app)
+
+app.add_middleware(
+    CORSMiddleware,
+    # "http://localhost", "http://localhost:8000", "https://localhost", "https://localhost:8000"
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 
 @app.on_event('startup')
