@@ -1,0 +1,71 @@
+name: Python
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+  PINECONE_API_ENV: ${{ vars.PINECONE_API_ENV }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  INDEX_NAME: ${{ vars.INDEX_NAME}}
+  mode: testing
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10", "3.11" ]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }} on ${{matrix.os}}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          #make install
+          make install-tests
+
+      - name: Lint with flake8
+        run: |
+          python -m pip install flake8
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install pytest
+
+      - name: Run tests
+        run: |
+          make test
+
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Dockerfile
+        run: |
+          docker build .

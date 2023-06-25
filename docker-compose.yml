@@ -1,0 +1,13 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "1605:1605"
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:1605/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
