@@ -1,7 +1,3 @@
-"""
-FIXME: rename to Cache
-
-"""
 from cachetools import LRUCache, TTLCache
 
 
