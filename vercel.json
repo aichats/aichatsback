@@ -8,7 +8,16 @@
         "maxLambdaSize": "2000mb",
         "pythonVersion": "3.11.x",
         "buildCommand": "make install && python -m compileall .",
-        "installCommand": "make install"
+        "installCommand": "make install",
+        "env": {
+          "PINECONE_API_KEY": "@pinecone-api-key",
+          "PINECONE_API_ENV": "@pinecone-api-env",
+          "OPENAI_API_KEY": "@openai-api-key",
+          "OPENAI_EMBEDDINGS_LLM": "@OPENAI_EMBEDDINGS_LLM",
+          "OPENAI_CHAT_MODEL": "gpt-3.5-turbo",
+          "INDEX_NAME": "aichat",
+          "MODE": "development"
+        }
       }
     }
   ],
