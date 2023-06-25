@@ -26,5 +26,5 @@ def create_index(index_name: str = INDEX_NAME, dimension: int = 1536, metric: st
         logging.warning(f'{index_name} index existed. skip creating.')
 
 
-def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME) -> Pinecone:
+def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME, namespace='') -> Pinecone:
     return Pinecone.from_documents(data, embedding=embeddings, index_name=index)

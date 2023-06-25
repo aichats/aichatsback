@@ -30,14 +30,20 @@ class Message:
     chat_id: int = None
 
 
+@dataclasses.dataclass
+class ErrorMessage():
+    error: str | Exception
+    chat_id: int
+
+
 @router.get('/')
 async def get_list():  # TODO:
     return {'chats': []}
 
 
-@router.get('/{chat_id}')  # TODO:
-async def get(chat_id: int):
-    return {'message': f'chat id {chat_id}'}
+# @router.get('/{chat_id}')  # TODO:
+# async def get(chat_id: int):
+#     return {'message': f'chat id {chat_id}'}
 
 
 @router.post('/')
@@ -54,7 +60,7 @@ async def create(msg: Message):
 
     answer = Message(BOT, response.choices[0].text.strip(), new_chat_id)
 
-    return {'message': answer}
+    return answer
 
 
 @router.post('/{chat_id}/upload')
@@ -62,12 +68,14 @@ async def upload(chat_id: int, file: UploadFile):  # TODO: support multiple
     if file is None or chat_id is None:
         res = JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={'error': 'No file attached or chat_id is not provided'},
+            content=ErrorMessage(
+                'No file attached or chat_id is not provided', chat_id,
+            ),
         )
         return res
 
     if file.content_type != 'application/pdf':
-        return {'error': 'Only PDF files are allowed'}
+        return ErrorMessage('Only pdf files are supported', chat_id)
 
     try:
         data = pdf.extract(file.file)
@@ -82,7 +90,7 @@ async def upload(chat_id: int, file: UploadFile):  # TODO: support multiple
 
         return {'message': 'Uploaded successfully', 'chat_id': chat_id}
     except Exception as e:
-        return {'error': str(e)}
+        return ErrorMessage(e)  # TODO:Define error format dataclass
 
 
 @router.put('/{chat_id}')  # TODO:
