@@ -23,8 +23,8 @@ ec2:
 	sudo apt update
 	sudo apt install python3-pip
 	alias python=python3
-	make install
-	make run
+	sudo make install
+	sudo make run
 
 
 install:
