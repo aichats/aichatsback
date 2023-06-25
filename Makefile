@@ -27,7 +27,7 @@ run:
 	@python -m uvicorn app:app --port 80
 
 dev:
-	@python -m uvicorn app:app --port 1605
+	@python -m uvicorn app:app --reload --port 1605
 
 install-tests:
 	@ python -m pip install -r requirements-test.txt
