@@ -59,4 +59,4 @@ env:
 	@[ -f .env ] && echo ".env file already exists. Appending"
 	grep -v '^#' .env.example | cut -d '=' -f 1 | xargs -I {} bash -c 'echo "$1=${!1}"' _ {} >> .env
 
-.PHONY: run install clean setup test run env deploy compose docker
+.PHONY: run install clean setup test run env deploy compose docker dev
