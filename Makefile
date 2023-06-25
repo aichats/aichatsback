@@ -42,6 +42,10 @@ docker:
 	@echo "docker building"
 	docker build . -t aichats
 
+compose:
+	docker-compose up --build --force-recreate
+
+
 deploy:
 	docker build -t laciferin/aichats .
 	docker login -u laciferin
