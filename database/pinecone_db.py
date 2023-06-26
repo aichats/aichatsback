@@ -4,7 +4,7 @@ from typing import List
 
 import pinecone
 
-from config.constants import INDEX_NAME
+from config.constants import INDEX_NAME, OPENAI_EMBEDDINGS_LLM
 from icecream import ic
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.schema import Document
@@ -28,12 +28,18 @@ def create_index(index_name: str = INDEX_NAME, dimension: int = 1536, metric: st
 
 
 def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME, namespace='') -> Pinecone:
-    return Pinecone.from_documents(data, embedding=embeddings, index_name=index)
+    return Pinecone.from_documents(
+        data, embedding=embeddings,
+        index_name=index,
+    )  # TODO: support namespaces based on user
 
 
 @cache
-def get_vectorstore(index_name=INDEX_NAME, embeddings=OpenAIEmbeddings()) -> Pinecone:
+def get_vectorstore(
+    index_name=INDEX_NAME, namespace: str = None, text_key: str = 'text',
+    embeddings=OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM),
+) -> Pinecone:
     vectorstore = Pinecone.from_existing_index(
-        index_name=index_name, embedding=embeddings,
+        index_name=index_name, embedding=embeddings, namespace=namespace, text_key=text_key,
     )
     return vectorstore
