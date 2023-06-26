@@ -50,9 +50,9 @@ def get_conversation(chat_id: str) -> ConversationChain:
 
 
 @router.get('/{chat_id}')  # TODO:
-async def get(chat_id: str) -> List[Message | ErrorMessage]:
+async def get(chat_id: str) -> List[Message]:
     conversation = get_conversation(chat_id)
-    msgs: List[Message | ErrorMessage] = []
+    msgs: List[Message] = []
     for i, msg in enumerate(conversation):
         msg += Message()
 
