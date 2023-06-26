@@ -144,7 +144,7 @@ async def create_v2(msg: Message):
     return answer
 
 
-@router.put('/{chat_id}/upload')
+@router.put('/{chat_id}/upload')  # release:remove support only support v1
 async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
     if chat_id == '0':
         chat_id = uuid4()
@@ -170,3 +170,6 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
         return Message(BOT, 'uploaded successfully', chat_id)
     except Exception as e:
         return ErrorMessage(e, chat_id)
+
+
+router.put('/{chat_id}/upload/v1')(upload)
