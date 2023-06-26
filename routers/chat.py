@@ -79,24 +79,24 @@ async def create(msg: Message):
 
 @router.post('/{chat_id}/upload')
 async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
-    if file is None or chat_id is None:
+
+    if file is None or file.content_type != 'application/pdf':
         res = JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content=ErrorMessage(
-                'No file attached or chat_id is not provided', chat_id,
+                'No file attached',
             ),
         )
+        if file.content_type != 'application/pdf':
+            res.content = ErrorMessage('Only pdf files are supported', chat_id)
+
         return res
 
+    # conversation = get_conversation(chat_id)
     chat_id = chat_id or uuid4()
-
-    if file.content_type != 'application/pdf':
-        return ErrorMessage('Only pdf files are supported', chat_id)
 
     try:
         data = pdf.extract(file.file)
-        ic('pdfs have been reading into data')
-
         # Use loader and data splitter to make a document list
         doc = get_text_chunk(data)
         ic(f'text_chunks are generated and the total chucks are {len(doc)}')
@@ -106,13 +106,4 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
 
         return Message(BOT, 'uploaded successfully', chat_id)
     except Exception as e:
-        return ErrorMessage(e)
-
-# @router.put('/{chat_id}')  # TODO:
-# async def upsert(chat_id: str, msg: Message):
-#     msg.chat_id |= chat_id
-#     return create(msg)
-
-# @router.delete('/{chat_id}')  # TODO:
-# async def delete(chat_id: int):
-#     return {'message': f'chat id {chat_id} deleted'}
+        return ErrorMessage(e, chat_id)
