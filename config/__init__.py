@@ -1,6 +1,9 @@
 from icecream import ic
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import Pinecone
 
 from config import log, open_ai, pinecone
+from config.constants import INDEX_NAME
 
 
 def setup():

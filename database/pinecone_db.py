@@ -1,4 +1,5 @@
 import logging
+from functools import cache
 from typing import List
 
 import pinecone
@@ -28,3 +29,11 @@ def create_index(index_name: str = INDEX_NAME, dimension: int = 1536, metric: st
 
 def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME, namespace='') -> Pinecone:
     return Pinecone.from_documents(data, embedding=embeddings, index_name=index)
+
+
+@cache
+def get_vectorstore(index_name=INDEX_NAME, embeddings=OpenAIEmbeddings()) -> Pinecone:
+    vectorstore = Pinecone.from_existing_index(
+        index_name=index_name, embedding=embeddings,
+    )
+    return vectorstore

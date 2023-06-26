@@ -4,11 +4,19 @@ from typing import Dict, List, TypeVar
 from uuid import uuid4
 
 import langchain
+
+from config.constants import OPENAI_CHAT_MODEL
+from database.pinecone_db import get_vectorstore
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from icecream import ic
 from langchain import ConversationChain, OpenAI
-
+from langchain.chains import ConversationalRetrievalChain
+from langchain.chains.conversational_retrieval.base import (
+    BaseConversationalRetrievalChain,
+)
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
 from utils.ai.open_ai import get_text_chunk, insert
 from utils.inputs import pdf
 
@@ -48,6 +56,36 @@ def get_conversation(chat_id: str) -> ConversationChain:
     llm = OpenAI(temperature=0)
     conversation = ConversationChain(llm=llm, verbose=True)
     return conversation
+
+
+@cache
+def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
+    # from langchain import PromptTemplate
+    #
+    # # Define a custom prompt template
+    # template = """Given the following conversation, respond to the best of your ability:
+    # Chat History:
+    # {chat_history}
+    # Follow Up Input: {question}
+    # Standalone question:"""
+    #
+    # prompt = PromptTemplate(
+    #     input_variables=["chat_history", "question"],
+    #     template=template
+    # )
+    vectorstore = get_vectorstore()
+    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
+    memory = ConversationBufferMemory(
+        memory_key='chat_history', return_messages=True,
+    )
+    conversation_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory,
+        # combine_docs_chain_kwargs={"prompt": prompt}
+    )
+    ic(chat_id)
+    return conversation_chain
 
 
 @router.get('/{chat_id}')  # TODO:
