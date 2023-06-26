@@ -1,27 +1,15 @@
 import dataclasses
-import http
-import shutil
 from functools import cache
-from http.client import HTTPException
 from typing import List, TypeVar
 from uuid import uuid4
 
-import delta as delta
-import openai
-
-from config.constants import OPENAI_CHAT_MODEL
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
-from h11 import Response
 from icecream import ic
 from langchain import ConversationChain, OpenAI
-from pydantic import BaseModel
-from utils.ai.open_ai import get_text_chunk, insert
-from utils.cache import Cache
-from utils.inputs import pdf
-from utils.inputs.html import extract
 
-from utils.Time import deltaTime
+from utils.ai.open_ai import get_text_chunk, insert
+from utils.inputs import pdf
 
 router = APIRouter(tags=['chat'])
 
@@ -43,20 +31,14 @@ class Message:
 
 
 @dataclasses.dataclass
-class ErrorMessage():
+class ErrorMessage:
     error: str | Exception
     chat_id: str
 
 
-@router.get('/')
-async def get_list():  # TODO:
-    return {'chats': []}
-
-
-# @router.get('/{chat_id}')  # TODO:
-# async def get(chat_id: str):
-#     return {'message': f'chat id {chat_id}'}
-
+# @router.get('/') #Need DB
+# async def get_list():  # TODO:
+#     return {'chats': []}
 @cache
 def get_conversation(chat_id: str) -> ConversationChain:
     # conversation = cache.get(chat_id)
@@ -65,6 +47,16 @@ def get_conversation(chat_id: str) -> ConversationChain:
     llm = OpenAI(temperature=0)
     conversation = ConversationChain(llm=llm, verbose=True)
     return conversation
+
+
+@router.get('/{chat_id}')  # TODO:
+async def get(chat_id: str) -> List[Message | ErrorMessage]:
+    conversation = get_conversation(chat_id)
+    msgs: List[Message | ErrorMessage] = []
+    for i, msg in enumerate(conversation):
+        msg += Message()
+
+    return {'total': i, 'msgs': msgs}
 
 
 @router.post('/')
@@ -106,13 +98,12 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
 
         return Message(BOT, 'uploaded successfully', chat_id)
     except Exception as e:
-        return ErrorMessage(e)  # TODO:Define error format dataclass
+        return ErrorMessage(e)
 
-
-@router.put('/{chat_id}')  # TODO:
-async def upsert(chat_id: str, msg: Message):
-    msg.chat_id |= chat_id
-    return create(msg)
+# @router.put('/{chat_id}')  # TODO:
+# async def upsert(chat_id: str, msg: Message):
+#     msg.chat_id |= chat_id
+#     return create(msg)
 
 # @router.delete('/{chat_id}')  # TODO:
 # async def delete(chat_id: int):
