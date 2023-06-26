@@ -76,8 +76,9 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
     #     input_variables=["chat_history", "question"],
     #     template=template
     # )
+
     vectorstore = get_vectorstore()
-    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
+    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL, namespace=chat_id)
     memory = ConversationBufferMemory(
         memory_key='chat_history', return_messages=True,
     )
@@ -160,8 +161,6 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
         data = pdf.extract(file.file)
         # Use loader and data splitter to make a document list
         doc = get_text_chunk(data)
-        ic(f'text_chunks are generated and the total chucks are {len(doc)}')
-
         # Upsert data to the VectorStore
         insert(doc)
 
