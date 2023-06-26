@@ -142,23 +142,19 @@ async def create(msg: Message):
 
 @router.put('/{chat_id}/upload')
 async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
+    if chat_id == '0':
+        chat_id = uuid4()
 
-    if file is None or file.content_type != 'application/pdf':
+    if file.content_type != 'application/pdf':
         res = JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content=ErrorMessage(
-                'No file attached',
+                'Only pdf files are supported currently', chat_id,
             ),
         )
-        if file.content_type != 'application/pdf':
-            res.content = ErrorMessage('Only pdf files are supported', chat_id)
-
         return res
 
-    if chat_id == '0':
-        chat_id = uuid4()
     # conversation = get_conversation(chat_id)
-    chat_id = chat_id or uuid4()
 
     try:
         data = pdf.extract(file.file)
