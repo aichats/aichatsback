@@ -62,7 +62,7 @@ async def get(chat_id: str) -> dict[str, list[Message] | int]:
 
         _class = msg.__class__
         ic(i, msg.content, _class)
-        msgs += Message(sender, msg.content, chat_id)
+        msgs.append(Message(sender, msg.content, chat_id))
 
     return {'total': len(msgs), 'msgs': msgs}
 
