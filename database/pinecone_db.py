@@ -36,8 +36,8 @@ def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME,
 
 @cache
 def get_vectorstore(
-    index_name=INDEX_NAME, namespace: str = None, text_key: str = 'text',
-    embeddings=OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM),
+        index_name=INDEX_NAME, namespace: str = None, text_key: str = 'text',
+        embeddings=OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM),
 ) -> Pinecone:
     vectorstore = Pinecone.from_existing_index(
         index_name=index_name, embedding=embeddings, namespace=namespace, text_key=text_key,

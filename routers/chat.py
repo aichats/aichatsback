@@ -39,7 +39,7 @@ alog = logging.getLogger('app')
 class Message:
     sender: SENDER
     message: str
-    chat_id: str = None
+    chat_id: str = uuid4()
 
 
 @dataclasses.dataclass
@@ -76,11 +76,10 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
     #     input_variables=["chat_history", "question"],
     #     template=template
     # )
-
-    vectorstore = get_vectorstore()
-    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL, namespace=chat_id)
+    vectorstore = get_vectorstore(namespace=chat_id)
+    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
     memory = ConversationBufferMemory(
-        memory_key='chat_history', return_messages=True,
+        memory_key=chat_id, return_messages=True,
     )
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
@@ -88,56 +87,60 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
         memory=memory,
         # combine_docs_chain_kwargs={"prompt": prompt}
     )
-    ic(chat_id)
+    ic(chat_id, conversation_chain)
     return conversation_chain
 
 
-@router.get('/{chat_id}')  # TODO:
-async def get(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation = get_conversation(chat_id)
+@router.get('/v1/{chat_id}')
+async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
+    conversation: ConversationChain = get_conversation(chat_id)
     msgs: List[Message] = []
 
-    if isinstance(conversation, ConversationChain):
-        for i, msg in enumerate(conversation.memory.chat_memory.messages):
-            if isinstance(msg, langchain.schema.AIMessage):
-                sender = BOT
-            else:
-                sender = USER
+    for i, msg in enumerate(conversation.memory.chat_memory.messages):
+        if isinstance(msg, langchain.schema.AIMessage):
+            sender = BOT
+        else:
+            sender = USER
 
-            _class = msg.__class__
-            ic(i, msg.content, _class)
-            msgs.append(Message(sender, msg.content, chat_id))
-
-    # elif isinstance(conversation,BaseConversationalRetrievalChain ):
-    #     response = conversation({'question': user_question}) #TODO
-    #     st.session_state.chat_history = response['chat_history']
-    #
-    #     chat_history = st.session_state.chat_history
-    #
-    #     for i, message in enumerate(chat_history):
-    #         if i % 2 == 0:  # User's message #FIXME
-    #             st.write(
-    #                 tpl_user.replace(
-    #                     '{{MSG}}', message.content,
-    #                 ), unsafe_allow_html=True,
-    #             )
-    #         else:  # AI message
-    #             st.write(
-    #                 tpl_bot.replace(
-    #                     '{{MSG}}', message.content,
-    #                 ), unsafe_allow_html=True,
-    #             )
+        _class = msg.__class__
+        ic(i, msg.content, _class)
+        msgs.append(Message(sender, msg.content, chat_id))
 
     return {'total': len(msgs), 'msgs': msgs}
 
 
-@router.post('/')
-async def create(msg: Message):
-    answer = Message(BOT, None, msg.chat_id or uuid4())
+@router.get('/v2/{chat_id}')
+async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
+    conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
+    msgs: List[Message] = []
 
-    conversation = get_conversation(answer.chat_id)
+    chat_history = conversation['chat_history']
+
+    for i, message in enumerate(chat_history):
+        # message.content
+        # TODO:
+        ic(i, message)
+        pass
+
+    return {'total': len(msgs), 'msgs': msgs}
+
+
+@router.post('/v1')  # release: using conversation chain
+async def create_v1(msg: Message):
+    answer = Message(BOT, None, msg.chat_id)
+    conversation: ConversationChain = get_conversation(answer.chat_id)
     answer.message = conversation.predict(input=msg.message)
+    return answer
 
+
+# release: using conversation retrieval chain for pdf support
+@router.post('/v2')
+async def create_v2(msg: Message):
+    answer = Message(BOT, None, msg.chat_id)
+    conversation: BaseConversationalRetrievalChain = get_chat(answer.chat_id)
+    response = conversation({'question': msg.message})
+    msg = response['chat_history'][-1]
+    answer.message = msg.content  # TODO: performance fix
     return answer
 
 
