@@ -1,8 +1,9 @@
 import dataclasses
 from functools import cache
-from typing import List, TypeVar
+from typing import Dict, List, TypeVar
 from uuid import uuid4
 
+import langchain
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from icecream import ic
@@ -50,13 +51,20 @@ def get_conversation(chat_id: str) -> ConversationChain:
 
 
 @router.get('/{chat_id}')  # TODO:
-async def get(chat_id: str) -> List[Message]:
+async def get(chat_id: str) -> dict[str, list[Message] | int]:
     conversation = get_conversation(chat_id)
     msgs: List[Message] = []
-    for i, msg in enumerate(conversation):
-        msg += Message()
+    for i, msg in enumerate(conversation.memory.chat_memory.messages):
+        if isinstance(msg, langchain.schema.AIMessage):
+            sender = BOT
+        else:
+            sender = USER
 
-    return {'total': i, 'msgs': msgs}
+        _class = msg.__class__
+        ic(i, msg.content, _class)
+        msgs += Message(sender, msg.content, chat_id)
+
+    return {'total': len(msgs), 'msgs': msgs}
 
 
 @router.post('/')
