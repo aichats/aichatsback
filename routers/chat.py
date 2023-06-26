@@ -140,7 +140,7 @@ async def create(msg: Message):
     return answer
 
 
-@router.post('/{chat_id}/upload')
+@router.put('/{chat_id}/upload')
 async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
 
     if file is None or file.content_type != 'application/pdf':
