@@ -208,7 +208,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
     if file.content_type != 'application/pdf':
         return ErrorMessage(
             'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
-        )
+        )()
     try:
         data = pdf.extract(file.file)
         # Use loader and data splitter to make a document list
@@ -225,7 +225,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
     except Exception as e:
         return ErrorMessage(
             e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
-        )
+        )()
 
 
 router.post('/')(create_v1)
