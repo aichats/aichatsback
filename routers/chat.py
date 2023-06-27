@@ -12,7 +12,10 @@ from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from icecream import ic
 from langchain import ConversationChain, OpenAI
-from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
+from langchain.chains.conversational_retrieval.base import (
+    BaseConversationalRetrievalChain,
+    ConversationalRetrievalChain,
+)
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from utils.ai.open_ai import get_text_chunk, insert
@@ -60,7 +63,7 @@ def get_conversation(chat_id: str) -> ConversationChain:
 
 
 @cache
-def get_chat(chat_id: str) -> ConversationalRetrievalChain:
+def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
     # from langchain import PromptTemplate
     # TODO:prompt
     # # Define a custom prompt template
@@ -112,16 +115,23 @@ async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
 
 @router.get('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: ConversationalRetrievalChain = get_chat(chat_id)
+    conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
     msgs: List[Message] = []
 
-    chat_history = conversation['chat_history']
+    chat_history = conversation.memory.chat_memory
 
-    for i, message in enumerate(chat_history):
-        # message.content
-        # TODO:
-        ic(i, message)
-        pass
+    for i, msg in enumerate(chat_history.messages):
+        match msg.__class__:
+            case langchain.schema.AIMessage:
+                sender = BOT
+            case langchain.schema.HumanMessage:
+                sender = USER
+            case _:
+                alog.error(msg)
+                raise Exception('Unknown message type', msg.__class__)
+        # ic(i, msg)
+        _msg = Message(sender, msg.content, chat_id)
+        msgs.append(_msg)
 
     return {'total': len(msgs), 'msgs': msgs}
 
