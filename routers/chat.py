@@ -120,7 +120,10 @@ async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
     conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
     msgs: List[Message] = []
 
-    chat_history = conversation.memory.chat_memory
+    chat_history: List[
+        langchain.schema.AIMessage |
+        langchain.schema.HumanMessage
+    ] = conversation.memory.chat_memory
 
     for i, msg in enumerate(chat_history.messages):
         # ic(i, msg)
