@@ -65,6 +65,9 @@ class ErrorMessage:
     chat_id: str
     status_code: http.HTTPStatus = status.HTTP_400_BAD_REQUEST
 
+    def __post_init__(self):
+        self.error = str(self.error)
+
     def __repr__(self):
         return self.__call__()
 
