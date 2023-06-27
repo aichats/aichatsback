@@ -1,7 +1,7 @@
 import dataclasses
 import logging
 from functools import cache
-from typing import Dict, List, TypeVar
+from typing import List, TypeVar
 from uuid import uuid4
 
 import langchain
@@ -12,10 +12,7 @@ from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from icecream import ic
 from langchain import ConversationChain, OpenAI
-from langchain.chains import ConversationalRetrievalChain
-from langchain.chains.conversational_retrieval.base import (
-    BaseConversationalRetrievalChain,
-)
+from langchain.chains.conversational_retrieval.base import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from utils.ai.open_ai import get_text_chunk, insert
@@ -66,9 +63,9 @@ def get_conversation(chat_id: str) -> ConversationChain:
 
 
 @cache
-def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
+def get_chat(chat_id: str) -> ConversationalRetrievalChain:
     # from langchain import PromptTemplate
-    #
+    # TODO:prompt
     # # Define a custom prompt template
     # template = """Given the following conversation, respond to the best of your ability:
     # Chat History:
@@ -83,7 +80,7 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
     vectorstore = get_vectorstore(namespace=chat_id)
     llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
     memory = ConversationBufferMemory(
-        memory_key=chat_id, return_messages=True,
+        memory_key='chat_history', return_messages=True,
     )
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
@@ -91,7 +88,6 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
         memory=memory,
         # combine_docs_chain_kwargs={"prompt": prompt}
     )
-    ic(chat_id)
     return conversation_chain
 
 
@@ -119,7 +115,7 @@ async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
 
 @router.get('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
+    conversation: ConversationalRetrievalChain = get_chat(chat_id)
     msgs: List[Message] = []
 
     chat_history = conversation['chat_history']
@@ -145,10 +141,10 @@ async def create_v1(msg: Message):
 @router.post('/v2')
 async def create_v2(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
-    conversation: BaseConversationalRetrievalChain = get_chat(answer.chat_id)
+    conversation: ConversationalRetrievalChain = get_chat(msg.chat_id)
+    ic(conversation)
     response = conversation({'question': msg.message})
-    msg = response['chat_history'][-1]
-    answer.message = msg.content  # TODO: performance fix
+    answer.message = response['answer']
     return answer
 
 
