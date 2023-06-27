@@ -67,6 +67,9 @@ class ErrorMessage:
 
     def __post_init__(self):
         self.error = str(self.error)
+        alog.error(
+            self.__dict__,
+        )
 
     def __repr__(self):
         return self.__call__()
@@ -199,6 +202,9 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
 
 @router.put('/{chat_id}/upload/v2')
 async def upload_v2(chat_id: str, file: UploadFile):
+    if chat_id == '0':  # For beginning of new conversation
+        chat_id = uuid4()
+
     if file.content_type != 'application/pdf':
         return ErrorMessage(
             'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
@@ -208,7 +214,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
         # Use loader and data splitter to make a document list
         doc = get_text_chunk(data)
         # Upsert data to the VectorStore
-        insert(doc)
+        insert(doc, chat_id)
         conversation = get_conversation(chat_id)
         res = conversation.run(
             {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},

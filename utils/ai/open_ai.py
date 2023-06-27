@@ -29,7 +29,7 @@ def get_text_chunk(text):
     return docs
 
 
-def insert(data) -> Pinecone:
+def insert(data, namespace: str = '', index: str = INDEX_NAME) -> Pinecone:
     embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM)
 
     #   will not to use vector in memory today.
@@ -39,8 +39,10 @@ def insert(data) -> Pinecone:
     # https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pinecone
 
     vectorstore = pinecone_db.insert(
-        data,
-        embeddings,
+        data=data,
+        embeddings=embeddings,
+        namespace=namespace,
+        index=index,
     )
     return vectorstore
 
