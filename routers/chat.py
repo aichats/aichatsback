@@ -42,7 +42,7 @@ class Message:
     chat_id: str = None
 
     def __post_init__(self):
-        if self.chat_id is None:
+        if self.chat_id is None or self.chat_id == 'null':
             self.chat_id = uuid4().hex
 
 
