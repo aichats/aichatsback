@@ -1,0 +1,618 @@
+{
+	"info": {
+		"_postman_id": "2e31ab4c-6f90-4496-b748-88c803fc8c36",
+		"name": "v0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "11058592-2e31ab4c-6f90-4496-b748-88c803fc8c36"
+	},
+	"item": [
+		{
+			"name": "Home",
+			"id": "5ac24aaa-36fe-4c43-a538-56936aca3e78",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}",
+					"host": [
+						"{{u}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "b49e2ef0-7d81-47bb-b8c1-98964acdb10c",
+					"name": "Root",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{u}}",
+							"host": [
+								"{{u}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sat, 24 Jun 2023 10:34:20 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "27"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"AI Chat is up\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "03e7af63-be3b-411b-999e-6ff299ea6ddd",
+						"exec": [
+							"let body = pm.response.json()",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Health\", function () {",
+							"  pm.expect(body.status).to.eql(\"ok\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "6b06ed3d-a623-4428-823a-b662957a1209",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}/health",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "be9b3dd0-a534-4b6d-bb72-bf576d632b11",
+					"name": "Root",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{u}}",
+							"host": [
+								"{{u}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sat, 24 Jun 2023 10:34:20 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "27"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"AI Chat is up\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Chat Get All",
+			"id": "73d87136-c45a-4d4e-a544-144c0640913f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}/chat",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat Get ID",
+			"id": "82fae63b-d57d-4585-8022-9275e3867e4a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}/chat/:id",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{chat_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chat Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4c2c5738-4149-43e9-87d9-2d6c74e91889",
+						"exec": [
+							"function sendRequest(id,s){",
+							"    console.log(id,s)",
+							"}",
+							"",
+							"sendRequest(1,\"apple\")",
+							"sendRequest(2,\"orange\")"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "cfd27db1-7653-44c5-8c71-73591f673938",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"I am a golang engineer.\",\n  \"chat_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "1d0f8687-181b-4f97-b320-5acc91bdd995",
+					"name": "Chat Create",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Hello, how are you?\",\n  \"chat_id\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sun, 25 Jun 2023 01:28:24 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "512"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"IndyStar\\n\\nWith the Joe Biden and Kamala Harris win looming, one can only hope that many minds will change. It appears that we may not know the actual outcome of this election for a while yet, and for many, that is concerning. What might be more concerning, however, is that this election has furthered the divide between many Americans.\\n\\nHow will we come together as a nation after such a heated and divisive election?\\n\\nThe battleground states of Wisconsin, Arizona\",\n    \"chat_id\": 1\n}"
+				},
+				{
+					"id": "800d8d85-bfe9-40e1-abb6-5b1b3a361455",
+					"name": "Chat Create",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Bye\",\n  \"chat_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sun, 25 Jun 2023 03:56:09 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "430"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"Material: PU Leather\\n\\nSize: 12(L) * 10(H)* 5.5(W) inch\\n\\nStyle: Dual Purpose, Single Shoulder bag and Backpack\\n\\nFeatures: designed with one adjustable shoulder strap, well-structured, super-large capacity\\n\\nInterior: 1 main compartment, 1 telephone pocket, 2 ID/card pockets, multiple inner pockets\\n\\nSpecial design make it fashion and practical\\n\\nThis bag will make you stand out.\",\n    \"chat_id\": 1\n}"
+				},
+				{
+					"id": "9fb0211b-9111-4807-a97d-726770dafec9",
+					"name": "Chat Create",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Two people have pleaded guilty and been sent to prison; the law has been clarified; a huge deterrent message has been delivered.\",\n  \"chat_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sun, 25 Jun 2023 23:18:00 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "478"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"Starlight\\n\\nOne fine day, I looked up and saw the starlight in the sky. All of the stars were twinkling and it was such a beautiful sight. I felt like I could reach out and touch them and I felt so small and insignificant. The starlight had been there for millions of years, but no one had paid attention to it until that moment. I could feel the power of the universe in that moment, and it made me feel so connected to everything. I\",\n    \"chat_id\": \"1\"\n}"
+				}
+			]
+		},
+		{
+			"name": "PDF Upload",
+			"id": "3717e9a9-1f4b-422b-8488-f1d48577a0da",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/hiro/aiFame/aichatsback/testdata/Hiro Hamada LW Certificate_ Python.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{u}}/chat/:id/upload",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						":id",
+						"upload"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{chat_id}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "3b9dc5cf-93a5-4ff3-87ed-754b5b3942c1",
+					"name": "Chat Upload",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [
+										"/Users/hiro/aiFame/aichatsback/testdata/Hiro Hamada LW Certificate_ Python.pdf"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{u}}/chat/:id/upload",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								":id",
+								"upload"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "\"\""
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Sat, 24 Jun 2023 14:27:42 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "47"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Uploaded successfully\",\n    \"chat_id\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Conversation Update",
+			"id": "9e119f30-7692-456c-9691-8280066491a7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"who is Nashaath?\",\n  \"chat_id\": \"{{chat_id}}\"\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CORS",
+			"id": "7be9bbf1-1a34-4afd-80f3-bb5e1b905d02",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "{{u}}",
+					"host": [
+						"{{u}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cors",
+			"id": "9bbc392e-f833-4a09-895b-bbd8dd969c24",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Origin",
+						"value": "https://34.199.237.66"
+					},
+					{
+						"key": "Access-Control-Request-Method",
+						"value": "GET"
+					},
+					{
+						"key": "Access-Control-Request-Headers",
+						"value": "X-Requested-With"
+					},
+					{
+						"key": "Referer",
+						"value": "http://localhost"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
+					}
+				],
+				"url": {
+					"raw": "{{u}}",
+					"host": [
+						"{{u}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Healthcheck http",
+			"id": "216e7565-b717-4161-9517-32dcfdcb08c7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://34.199.237.66",
+					"protocol": "http",
+					"host": [
+						"34",
+						"199",
+						"237",
+						"66"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Healthcheck https",
+			"id": "3708eda3-20d7-4f69-b017-56c6c0fe6831",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}",
+					"host": [
+						"{{u}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
