@@ -1,4 +1,5 @@
 import dataclasses
+import http
 import logging
 from functools import cache
 from typing import List, TypeVar
@@ -62,6 +63,19 @@ class Message:
 class ErrorMessage:
     error: str | Exception
     chat_id: str
+    status_code: http.HTTPStatus = status.HTTP_400_BAD_REQUEST
+
+    def __repr__(self):
+        return self.__call__()
+
+    def __call__(self):
+        return JSONResponse(
+            status_code=self.status_code,
+            content=self.__dict__,
+        )
+
+    def __json__(self):
+        return self.__dict__
 
 
 @cache
@@ -162,7 +176,7 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
             status_code=status.HTTP_400_BAD_REQUEST,
             content=ErrorMessage(
                 'Only pdf files are supported currently', chat_id,
-            ),
+            ).__dict__,
         )
         return res
 
@@ -178,6 +192,31 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
         return Message(BOT, 'uploaded successfully', chat_id)
     except Exception as e:
         return ErrorMessage(e, chat_id)
+
+
+@router.put('/{chat_id}/upload/v2')
+async def upload_v2(chat_id: str, file: UploadFile):
+    if file.content_type != 'application/pdf':
+        return ErrorMessage(
+            'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
+        )
+    try:
+        data = pdf.extract(file.file)
+        # Use loader and data splitter to make a document list
+        doc = get_text_chunk(data)
+        # Upsert data to the VectorStore
+        insert(doc)
+        conversation = get_conversation(chat_id)
+        res = conversation.run(
+            {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},
+        )
+        ic(res)
+
+        return Message(BOT, f'uploaded -{file.filename}', chat_id)
+    except Exception as e:
+        return ErrorMessage(
+            e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
 
 
 router.post('/')(create_v1)
