@@ -49,9 +49,6 @@ class ErrorMessage:
     chat_id: str
 
 
-# @router.get('/') #Need DB
-# async def get_list():  # TODO:
-#     return {'chats': []}
 @cache
 def get_conversation(chat_id: str) -> ConversationChain:
     # conversation = cache.get(chat_id)
