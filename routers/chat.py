@@ -35,9 +35,21 @@ alog = logging.getLogger('app')
 # )
 
 
+def resolve_sender(msg) -> str:
+    match msg.__class__:
+        case langchain.schema.AIMessage:
+            sender = BOT
+        case langchain.schema.HumanMessage:
+            sender = USER
+        case _:
+            alog.error(msg)
+            raise Exception('Unknown message type', msg.__class__)
+    return sender
+
+
 @dataclasses.dataclass
 class Message:
-    sender: SENDER
+    sender: SENDER | langchain.schema.AIMessage | langchain.schema.HumanMessage
     message: str
     chat_id: str = None
 
@@ -97,17 +109,7 @@ async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
     msgs: List[Message] = []
 
     for i, msg in enumerate(conversation.memory.chat_memory.messages):
-
-        match msg.__class__:
-            case langchain.schema.AIMessage:
-                sender = BOT
-            case langchain.schema.HumanMessage:
-                sender = USER
-            case _:
-                alog.error(msg)
-                raise Exception('Unknown message type', msg.__class__)
-
-        _msg = Message(sender, msg.content, chat_id)
+        _msg = Message(resolve_sender(msg), msg.content, chat_id)
         msgs.append(_msg)
 
     return {'total': len(msgs), 'msgs': msgs}
@@ -121,16 +123,8 @@ async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
     chat_history = conversation.memory.chat_memory
 
     for i, msg in enumerate(chat_history.messages):
-        match msg.__class__:
-            case langchain.schema.AIMessage:
-                sender = BOT
-            case langchain.schema.HumanMessage:
-                sender = USER
-            case _:
-                alog.error(msg)
-                raise Exception('Unknown message type', msg.__class__)
         # ic(i, msg)
-        _msg = Message(sender, msg.content, chat_id)
+        _msg = Message(resolve_sender(msg), msg.content, chat_id)
         msgs.append(_msg)
 
     return {'total': len(msgs), 'msgs': msgs}
@@ -148,7 +142,7 @@ async def create_v1(msg: Message):
 @router.post('/v2')
 async def create_v2(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
-    conversation: ConversationalRetrievalChain = get_chat(msg.chat_id)
+    conversation = get_chat(msg.chat_id)
     ic(conversation)
     response = conversation({'question': msg.message})
     answer.message = response['answer']
