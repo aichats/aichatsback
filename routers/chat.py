@@ -229,7 +229,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
 
         task = asyncio.create_task(create_v2(prompt_tmpl))
         # https://docs.python.org/3/library/asyncio-task.html#waiting-primitives
-        done, pending = await asyncio.wait([task], timeout=0.0000001)
+        done, pending = await asyncio.wait([task], timeout=pow(10, -7))
 
         return Message(BOT, f'uploaded-{file.filename}', chat_id)
     except Exception as e:
