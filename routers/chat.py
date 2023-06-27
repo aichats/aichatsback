@@ -1,6 +1,8 @@
+import asyncio
 import dataclasses
 import http
 import logging
+import sys
 from functools import cache
 from typing import List, TypeVar
 from uuid import uuid4
@@ -216,12 +218,20 @@ async def upload_v2(chat_id: str, file: UploadFile):
         # Upsert data to the VectorStore
         insert(doc, chat_id)
         conversation = get_conversation(chat_id)
-        res = conversation.run(
-            {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},
+        # res = conversation.run(
+        #     {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},
+        # )
+        prompt_tmpl = Message(
+            USER,
+            f"""uploaded a pdf file-{file.filename} which will serve as context for our conversation""",
+            chat_id,
         )
-        ic(res)
 
-        return Message(BOT, f'uploaded -{file.filename}', chat_id)
+        task = asyncio.create_task(create_v2(prompt_tmpl))
+        # https://docs.python.org/3/library/asyncio-task.html#waiting-primitives
+        done, pending = await asyncio.wait([task], timeout=0.0000001)
+
+        return Message(BOT, f'uploaded-{file.filename}', chat_id)
     except Exception as e:
         return ErrorMessage(
             e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
