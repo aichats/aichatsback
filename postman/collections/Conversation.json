@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "b38515e8-d741-4f2c-975c-5accf93c838d",
+		"name": "Conversation",
+		"description": "Support conversations and upload pdfs.\n\nBut cannot gather inference from pdfs for chats.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "11058592-b38515e8-d741-4f2c-975c-5accf93c838d"
+	},
+	"item": [
+		{
+			"name": "I am Hiro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "597c8027-7a6f-47db-9044-0192b78adc4f",
+						"exec": [
+							"const {sender,message,chat_id} = pm.response.json()",
+							"",
+							"console.log(chat_id,message)",
+							"",
+							"pm.environment.set(\"chat_id\",chat_id)",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "5c049fc0-3e16-4a27-934f-2896e6580fb5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Hi i am Hiro,Hello, how are you?\",\n  \"chat_id\":null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat/v1",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "2722e0a0-a29b-49cf-b832-40e64544ae61",
+					"name": "I am Hiro v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Hi i am Hiro,Hello, how are you?\",\n  \"chat_id\":null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v1",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:48:20 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "115"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Hi Hiro, I'm doing great! How about you?\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Conversation Update",
+			"id": "8d8f386a-b8a2-49df-92c0-0cde0e7b768b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"who is Hiro?\",\n  \"chat_id\": \"{{chat_id}}\"\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat/v1",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "b1e11983-242e-421e-9688-8a1b995b973d",
+					"name": "Conversation Update v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"who is Hiro?\",\n  \"chat_id\": \"{{chat_id}}\"\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v1",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:48:32 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "125"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Hiro is you! You just introduced yourself as Hiro.\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Chat Get ID v1",
+			"id": "ab1a388f-9ed5-4607-a19c-e085c805ccc6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{u}}/chat/v1/:id",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{chat_id}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "7cca0e28-f2ee-4bf0-a5c3-645a458185fd",
+					"name": "Chat Get ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{u}}/chat/v1/:id",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{chat_id}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:47:36 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "594"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"total\": 4,\n    \"msgs\": [\n        {\n            \"sender\": \"user\",\n            \"message\": \"I am Hiro, I am a golang engineer.\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"bot\",\n            \"message\": \" Hi Hiro, I'm an AI. It's nice to meet you. I'm impressed that you are a golang engineer. What do you like most about working with golang?\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"user\",\n            \"message\": \"who is Hiro?\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"bot\",\n            \"message\": \" Hiro is the name you just introduced yourself with. You said you are a golang engineer.\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "I need some help",
+			"id": "4e0c5bd9-15bf-43ed-b97c-06ab41d79f78",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"I am learning golang, can u prepare a study plan\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat/v1",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "045ee934-a355-4805-8394-d3c1cb00ce1a",
+					"name": "I need some help v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"I am learning golang, can u prepare a study plan\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v1",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:49:06 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "189"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Sure, I'd be happy to help you prepare a study plan for learning Golang. What kind of timeline are you looking at?\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
+				}
+			]
+		},
+		{
+			"name": "I want to see implementations of concurrency",
+			"id": "5d1e0e94-ee73-4589-9f38-f231583b73a0",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"I want to see implementations of concurrency\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat/v1",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "4dd2c70e-9574-4cc3-a3ae-54c3df6edf7b",
+					"name": "I want to see implementations of concurrency v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"I want to see implementations of concurrency\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v1",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:49:21 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "196"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Sure, I can help you find implementations of concurrency in Golang. Do you have any specific resources you'd like to use?\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Give me a breif description of myself v1",
+			"id": "96070f1a-6416-476f-b55c-2ce2824ef74c",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"What i am currently learning? Which programming language am i learning currencly\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{u}}/chat/v1",
+					"host": [
+						"{{u}}"
+					],
+					"path": [
+						"chat",
+						"v1"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "9ff3e107-12fb-49ea-9269-68939e0193e4",
+					"name": "Give me a breif description of myself v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"What i am currently learning? Which programming language am i learning currencly\",\n  \"chat_id\":\"{{chat_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v1",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Tue, 27 Jun 2023 16:55:35 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "141"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" It looks like you're learning Golang engineering. Is that correct?\",\n    \"chat_id\": \"03c5d673753743c8b38f30da9b58f802\"\n}"
+				}
+			]
+		}
+	]
+}
