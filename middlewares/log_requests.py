@@ -18,5 +18,10 @@ async def exception_handler(request: Request, exc: Exception):
     alog.error(f'Exception occurred: {exc}')
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={'message': 'Internal Server Error'},
+        content={
+            'request': request.url.path,
+            'exception': exc,
+            'status': 'error',
+            'message': 'Internal Server Error',
+        },
     )

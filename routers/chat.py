@@ -39,7 +39,11 @@ alog = logging.getLogger('app')
 class Message:
     sender: SENDER
     message: str
-    chat_id: str = uuid4()
+    chat_id: str = None
+
+    def __post_init__(self):
+        if self.chat_id is None:
+            self.chat_id = uuid4().hex
 
 
 @dataclasses.dataclass
@@ -87,30 +91,34 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
         memory=memory,
         # combine_docs_chain_kwargs={"prompt": prompt}
     )
-    ic(chat_id, conversation_chain)
+    ic(chat_id)
     return conversation_chain
 
 
 @router.get('/v1/{chat_id}')
-async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
+async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
     conversation: ConversationChain = get_conversation(chat_id)
     msgs: List[Message] = []
 
     for i, msg in enumerate(conversation.memory.chat_memory.messages):
-        if isinstance(msg, langchain.schema.AIMessage):
-            sender = BOT
-        else:
-            sender = USER
 
-        _class = msg.__class__
-        ic(i, msg.content, _class)
-        msgs.append(Message(sender, msg.content, chat_id))
+        match msg.__class__:
+            case langchain.schema.AIMessage:
+                sender = BOT
+            case langchain.schema.UserMessage:
+                sender = USER
+            case _:
+                alog.error(msg)
+                raise Exception('Unknown message type', msg.__class__)
+
+        _msg = Message(sender, msg.content, chat_id)
+        msgs.append(_msg)
 
     return {'total': len(msgs), 'msgs': msgs}
 
 
 @router.get('/v2/{chat_id}')
-async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
+async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
     conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
     msgs: List[Message] = []
 
@@ -144,8 +152,8 @@ async def create_v2(msg: Message):
     return answer
 
 
-@router.put('/{chat_id}/upload')  # release:remove support only support v1
-async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
+@router.put('/{chat_id}/upload/v1')  # release:remove support only support v1
+async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
     if chat_id == '0':
         chat_id = uuid4()
 
@@ -172,4 +180,6 @@ async def upload(chat_id: str, file: UploadFile):  # TODO: support multiple
         return ErrorMessage(e, chat_id)
 
 
-router.put('/{chat_id}/upload/v1')(upload)
+router.post('/')(create_v1)
+router.get('/{chat_id}')(get_chat_v1)
+router.put('/{chat_id}/upload')(upload_v1)
