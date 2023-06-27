@@ -105,7 +105,7 @@ async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
         match msg.__class__:
             case langchain.schema.AIMessage:
                 sender = BOT
-            case langchain.schema.UserMessage:
+            case langchain.schema.HumanMessage:
                 sender = USER
             case _:
                 alog.error(msg)
