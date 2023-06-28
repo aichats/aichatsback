@@ -39,7 +39,7 @@ jobs:
       - name: Write environment
         run: |
           echo $env >> .env
-          echo " MODE=$mode " > .env
+          echo " MODE=$mode " >> .env
           source .env
           mv .env .env1
 
