@@ -25,7 +25,7 @@ class Message:
 
     def __post_init__(self):
         if not is_valid_uuid(self.chat_id):
-            alog.error(f'generating new uuid for {self.chat_id}')
+            alog.debug(f'Message: new uuid for {self.chat_id}')
             self.chat_id = uuid4().hex
 
 
