@@ -12,11 +12,6 @@ router.include_router(chatv1)
 
 router.include_router(chatv3)
 
-# cache = Cache(
-#     maxsize=10000, ttl=deltaTime(min=20).total_seconds(),
-# )
-
-
 # release: using conversation retrieval chain for pdf support
 
 
