@@ -45,6 +45,9 @@ clean:
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
 	@find . -type d -name 'logs/*.log' -exec rm {} +
+	rm logs/app.log
+	rm logs/root.log
+
 
 docker:
 	@echo "docker building"
