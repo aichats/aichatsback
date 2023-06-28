@@ -1,36 +1,25 @@
 import asyncio
-import dataclasses
-import http
 import logging
-import sys
-import uuid
-from functools import cache
-from typing import List, TypeVar
+from typing import List
 from uuid import uuid4
 
 import langchain
 
-from config.constants import OPENAI_CHAT_MODEL
-from database.pinecone_db import get_vectorstore
+from enums.chat import BOT, ErrorMessage, Message, USER
+
 from fastapi import APIRouter, status, UploadFile
 from fastapi.responses import JSONResponse
 from icecream import ic
-from langchain import ConversationChain, OpenAI
+from langchain import ConversationChain
 from langchain.chains.conversational_retrieval.base import (
     BaseConversationalRetrievalChain,
-    ConversationalRetrievalChain,
 )
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
 from utils.ai.open_ai import get_text_chunk, insert
+from utils.chat import get_chat, get_conversation, resolve_sender
 from utils.inputs import pdf
 from utils.uuid import is_valid_uuid
 
 router = APIRouter(tags=['chat'])
-
-SENDER = TypeVar('SENDER', str, str)
-BOT: SENDER = 'bot'
-USER: SENDER = 'user'
 
 alog = logging.getLogger('app')
 
@@ -38,94 +27,6 @@ alog = logging.getLogger('app')
 # cache = Cache(
 #     maxsize=10000, ttl=deltaTime(min=20).total_seconds(),
 # )
-
-
-def resolve_sender(msg) -> str:
-    match msg.__class__:
-        case langchain.schema.AIMessage:
-            sender = BOT
-        case langchain.schema.HumanMessage:
-            sender = USER
-        case _:
-            alog.error(msg)
-            raise Exception('Unknown message type', msg.__class__)
-    return sender
-
-
-@dataclasses.dataclass
-class Message:
-    sender: SENDER | langchain.schema.AIMessage | langchain.schema.HumanMessage
-    message: str
-    chat_id: str = None
-
-    def __post_init__(self):
-        if not is_valid_uuid(self.chat_id):
-            self.chat_id = uuid4().hex
-
-
-@dataclasses.dataclass
-class ErrorMessage:
-    error: str | Exception
-    chat_id: str
-    status_code: http.HTTPStatus = status.HTTP_400_BAD_REQUEST
-
-    def __post_init__(self):
-        self.error = str(self.error)
-        alog.error(
-            self.__dict__,
-        )
-
-    def __repr__(self):
-        return self.__call__()
-
-    def __call__(self):
-        return JSONResponse(
-            status_code=self.status_code,
-            content=self.__dict__,
-        )
-
-    def __json__(self):
-        return self.__dict__
-
-
-@cache
-def get_conversation(chat_id: str) -> ConversationChain:
-    # conversation = cache.get(chat_id)
-    # if conversation is not None: return conversation
-
-    llm = OpenAI(temperature=0)
-    conversation = ConversationChain(llm=llm, verbose=True)
-    return conversation
-
-
-@cache
-def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
-    # from langchain import PromptTemplate
-    # TODO:prompt
-    # # Define a custom prompt template
-    # template = """Given the following conversation, respond to the best of your ability:
-    # Chat History:
-    # {chat_history}
-    # Follow Up Input: {question}
-    # Standalone question:"""
-    #
-    # prompt = PromptTemplate(
-    #     input_variables=["chat_history", "question"],
-    #     template=template
-    # )
-    vectorstore = get_vectorstore(namespace=chat_id)
-    llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
-    memory = ConversationBufferMemory(
-        memory_key='chat_history', return_messages=True,
-    )
-    conversation_chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vectorstore.as_retriever(),
-        memory=memory,
-        # combine_docs_chain_kwargs={"prompt": prompt}
-    )
-    return conversation_chain
-
 
 @router.get('/v1/{chat_id}')
 async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
@@ -218,7 +119,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
         # Use loader and data splitter to make a document list
         doc = get_text_chunk(data)
         # Upsert data to the VectorStore
-        insert(doc)
+        insert(doc, namespace=chat_id)
 
         prompt_tmpl = Message(
             USER,
