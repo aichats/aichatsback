@@ -38,10 +38,11 @@ jobs:
 
       - name: Write environment
         run: |
-          echo "MODE=$mode " > .env
           echo $env >> .env
+          echo " MODE=$mode " >> .env
+          sed -i 's/ /\n/g' .env
           source .env
-
+          mv .env .env1
 
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
