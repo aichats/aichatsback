@@ -63,7 +63,7 @@ def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
 
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
-        retriever=vectorstore.as_retriever(),  # namespace=chat_id),
+        retriever=vectorstore.as_retriever(namespace=chat_id),
         memory=memory,
         verbose=True,
         # combine_docs_chain_kwargs={"prompt": prompt}
