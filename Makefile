@@ -54,12 +54,13 @@ docker:
 compose:
 	@docker-compose up --build --force-recreate
 
-
-deploy:
+docker-deploy:
 	@docker build -t laciferin/aichats .
 	@docker login -u laciferin
 	@docker push laciferin/aichats:latest
 
+deploy:
+	ssh aichat "sh aichatsback/scripts/deploy.sh"
 
 env:
 	@[ -f .env ] && echo ".env file already exists. Appending"
