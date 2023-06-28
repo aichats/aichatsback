@@ -1,4 +1,4 @@
-session=app
+session="app"
 tmux select-pane -t $session:0
 tmux kill-session -t $session
 tmux new-session -d -s $session -c aichatsback
