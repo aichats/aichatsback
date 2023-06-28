@@ -1,1 +1,2 @@
-from .chat import SENDER
+# flake8: noqa: F403
+from .chat import *
