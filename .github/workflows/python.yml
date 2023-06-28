@@ -38,6 +38,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
 
+      - name: Write environment
+        run: echo ${{ secrets.ENV }} > .env
+
       - name: Install dependencies
         run: |
           #make install
