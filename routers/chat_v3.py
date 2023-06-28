@@ -44,7 +44,9 @@ def get_conversation_v3(chat_id: str) -> ConversationChain | BaseConversationalR
 
 @router.get('/v3/{chat_id}')
 async def get_chat(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: ConversationChain = get_conversation_v3(chat_id)
+    conversation: ConversationChain | BaseConversationalRetrievalChain = get_conversation_v3(
+        chat_id,
+    )
     msgs: List[Message] = []
 
     for i, msg in enumerate(conversation.memory.chat_memory.messages):

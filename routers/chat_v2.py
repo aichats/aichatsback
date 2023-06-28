@@ -20,7 +20,7 @@ from utils.uuid import is_valid_uuid
 router = APIRouter(tags=['chat v2'])
 
 
-@router.post('/v2/{chat_id}')
+@router.get('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
     conversation: BaseConversationalRetrievalChain = get_conversation_v2(
         chat_id,
