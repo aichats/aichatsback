@@ -41,8 +41,6 @@ jobs:
           echo $env >> .env
           echo " MODE=$mode " >> .env
           sed -i 's/ /\n/g' .env
-          source .env
-      #          mv .env .env1
 
       - name: Install dependencies
         run: |
