@@ -3,6 +3,7 @@ import dataclasses
 import http
 import logging
 import sys
+import uuid
 from functools import cache
 from typing import List, TypeVar
 from uuid import uuid4
@@ -23,6 +24,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from utils.ai.open_ai import get_text_chunk, insert
 from utils.inputs import pdf
+from utils.uuid import is_valid_uuid
 
 router = APIRouter(tags=['chat'])
 
@@ -57,7 +59,7 @@ class Message:
     chat_id: str = None
 
     def __post_init__(self):
-        if self.chat_id is None or self.chat_id == 'null':
+        if not is_valid_uuid(self.chat_id):
             self.chat_id = uuid4().hex
 
 
@@ -176,7 +178,7 @@ async def create_v2(msg: Message):
 
 @router.put('/{chat_id}/upload/v1')  # release:remove support only support v1
 async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
-    if chat_id == '0':
+    if not is_valid_uuid(chat_id):
         chat_id = uuid4()
 
     if file.content_type != 'application/pdf':
@@ -204,7 +206,7 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
 
 @router.put('/{chat_id}/upload/v2')
 async def upload_v2(chat_id: str, file: UploadFile):
-    if chat_id == '0':  # For beginning of new conversation
+    if not is_valid_uuid(chat_id):  # For beginning of new conversation
         chat_id = uuid4()
 
     if file.content_type != 'application/pdf':
@@ -217,10 +219,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
         doc = get_text_chunk(data)
         # Upsert data to the VectorStore
         insert(doc)
-        conversation = get_conversation(chat_id)
-        # res = conversation.run(
-        #     {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},
-        # )
+
         prompt_tmpl = Message(
             USER,
             f"""uploaded a pdf file-{file.filename} which will serve as context for our conversation""",
@@ -229,7 +228,8 @@ async def upload_v2(chat_id: str, file: UploadFile):
 
         task = asyncio.create_task(create_v2(prompt_tmpl))
         # https://docs.python.org/3/library/asyncio-task.html#waiting-primitives
-        done, pending = await asyncio.wait([task], timeout=pow(10, -7))
+        # doesn't block or raise in case of timeouts
+        await asyncio.wait([task], timeout=pow(10, -7))
 
         return Message(BOT, f'uploaded-{file.filename}', chat_id)
     except Exception as e:
