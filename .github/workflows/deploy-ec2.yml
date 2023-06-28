@@ -57,6 +57,6 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ./key.pem
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sh aichatsback/scripts/deploy.sh
