@@ -1,4 +1,4 @@
-from .uuid import is_valid_uuid
+from .uuid import *
 
 
 def test_is_valid_uuid():
