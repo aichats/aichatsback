@@ -104,7 +104,7 @@ async def upload(chat_id: str, file: UploadFile):
         c = get_conversation_v3(chat_id)
 
         if isinstance(c, ConversationChain):
-            conversation.memory = c.memory
+            # conversation.memory = c.memory #FIXME: trouble code
             cache.set(chat_id, conversation)
 
         task = asyncio.create_task(create_v3(prompt_tmpl))
