@@ -216,7 +216,7 @@ async def upload_v2(chat_id: str, file: UploadFile):
         # Use loader and data splitter to make a document list
         doc = get_text_chunk(data)
         # Upsert data to the VectorStore
-        insert(doc, chat_id)
+        insert(doc)
         conversation = get_conversation(chat_id)
         # res = conversation.run(
         #     {'question': f'uploaded a pdf file-{file.filename} which will serve as context for our conversation '},
