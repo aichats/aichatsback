@@ -7,6 +7,7 @@ from uuid import uuid4
 import langchain
 
 from config import alog
+from icecream import ic
 from starlette import status
 from starlette.responses import JSONResponse
 from utils.uuid import is_valid_uuid
@@ -24,6 +25,7 @@ class Message:
 
     def __post_init__(self):
         if not is_valid_uuid(self.chat_id):
+            alog.error(f'generating new uuid for {self.chat_id}')
             self.chat_id = uuid4().hex
 
 
