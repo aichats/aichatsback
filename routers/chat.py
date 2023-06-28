@@ -5,6 +5,7 @@ from uuid import uuid4
 
 import langchain
 
+from config import alog
 from enums.chat import BOT, ErrorMessage, Message, USER
 
 from fastapi import APIRouter, status, UploadFile
@@ -106,8 +107,9 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
 
 
 @router.put('/{chat_id}/upload/v2')
-async def upload_v2(chat_id: str, file: UploadFile):
+async def upload_v2(chat_id: str, file: UploadFile):  # FIX backport v1
     if not is_valid_uuid(chat_id):  # For beginning of new conversation
+        alog.error(__name__, 'invalid chat_id', chat_id)
         chat_id = uuid4().hex
 
     if file.content_type != 'application/pdf':
