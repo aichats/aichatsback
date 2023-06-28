@@ -18,6 +18,7 @@ env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   INDEX_NAME: ${{ vars.INDEX_NAME}}
   mode: testing
+  env: ${{secrets.ENV}}
 
 jobs:
   build:
@@ -39,7 +40,7 @@ jobs:
           cache: 'pip'
 
       - name: Write environment
-        run: echo ${{ secrets.ENV }} > .env
+        run: echo ${{ env.env }} > .env
 
       - name: Install dependencies
         run: |
