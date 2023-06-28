@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main #FIXME: remove after testing
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Write private key to file
+        run: echo ${{ secrets.SSH_PRIVATE_KEY }} > key.pem
+
+      - name: Write environment
+        run: echo ${{ secrets.ENV }} > .env
+
+      - name: SSH into EC2 and execute remote command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ./key.pem
+          script: |
+            echo "Hello, EC2!"
+            sh aichatsback/scripts/deploy.sh
