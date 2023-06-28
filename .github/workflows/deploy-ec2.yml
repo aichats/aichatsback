@@ -39,7 +39,7 @@ jobs:
       - name: Write environment
         run: |
           echo "MODE=$mode\n" > .env
-          echo ${{ env.env }} | cat >> .env
+          echo ${{ env.env }} >> .env
 
       - name: SSH into EC2 and execute remote command
         uses: appleboy/ssh-action@master
