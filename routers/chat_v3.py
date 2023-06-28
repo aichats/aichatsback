@@ -57,7 +57,7 @@ async def get_chat(chat_id: str) -> dict[str, list[Message] | int]:
 async def create(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
-    answer.message = await conversation.apredict(input=msg.message)
+    answer.message = conversation.predict(input=msg.message)  # FIXME: apredict
     return answer
 
 
