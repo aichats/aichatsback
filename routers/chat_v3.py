@@ -59,6 +59,7 @@ async def get_chat(chat_id: str) -> dict[str, list[Message] | int]:
 @router.post('/v3')  # release: using conversation chain
 async def create_v3(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
+
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
 
     if isinstance(conversation, BaseConversationalRetrievalChain):
@@ -67,7 +68,7 @@ async def create_v3(msg: Message):
         answer.message = await conversation.apredict(input=msg.message)
         return answer
     else:
-        raise Exception('Invalid conversation type')
+        raise ValueError('Invalid conversation type')
 
 
 @router.put('/{chat_id}/upload/v3')
