@@ -1,13 +1,17 @@
-import chat_v1
 from fastapi import APIRouter
 
-from .chat_v2 import get_chat_v2
+from .chat_v1 import router as chatv1
+from .chat_v2 import router as chatv2
+from .chat_v3 import router as chatv3
 
 router = APIRouter(tags=['chat'])
 
-router.include_router(chat_v1.router)
+router.include_router(chatv2)
 
-router.get('/v2/{chat_id}')(get_chat_v2)
+router.include_router(chatv1)
+
+router.include_router(chatv3)
+
 # cache = Cache(
 #     maxsize=10000, ttl=deltaTime(min=20).total_seconds(),
 # )

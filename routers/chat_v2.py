@@ -6,7 +6,7 @@ import langchain
 
 from config import alog
 from enums import BOT, ErrorMessage, Message, USER
-from fastapi import UploadFile
+from fastapi import APIRouter, UploadFile
 from icecream import ic
 from langchain.chains.conversational_retrieval.base import (
     BaseConversationalRetrievalChain,
@@ -17,9 +17,10 @@ from utils.chat import get_conversation_chain_v2, resolve_sender
 from utils.inputs import pdf
 from utils.uuid import is_valid_uuid
 
-from .chat import router
+router = APIRouter(tags=['chat v2'])
 
 
+@router.post('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
     conversation: BaseConversationalRetrievalChain = get_conversation_chain_v2(
         chat_id,
