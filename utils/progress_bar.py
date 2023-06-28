@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Final, Optional, Union
 
-from conf import alog
+from config import alog
 
 from tqdm import tqdm
 
