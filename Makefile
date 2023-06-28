@@ -44,6 +44,7 @@ clean:
 	@find . -type d -name '.pytest_cache' -exec rm -rf {} +
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
 	@find . -type d -name '__pycache__' -exec rm -rf {} +
+	@find . -type d -name 'logs/*.log' -exec rm {} +
 
 docker:
 	@echo "docker building"
@@ -53,12 +54,13 @@ docker:
 compose:
 	@docker-compose up --build --force-recreate
 
-
-deploy:
+docker-deploy:
 	@docker build -t laciferin/aichats .
 	@docker login -u laciferin
 	@docker push laciferin/aichats:latest
 
+deploy:
+	ssh aichat "sh aichatsback/scripts/deploy.sh"
 
 env:
 	@[ -f .env ] && echo ".env file already exists. Appending"

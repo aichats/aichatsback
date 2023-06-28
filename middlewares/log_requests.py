@@ -1,10 +1,12 @@
 import logging
 
+from config import alog
+
+from fastapi import HTTPException
 from starlette import status
 from starlette.requests import Request
-from starlette.responses import JSONResponse
 
-alog = logging.getLogger('app')
+from starlette.responses import JSONResponse
 
 
 async def log_requests(request: Request, call_next):
@@ -15,8 +17,7 @@ async def log_requests(request: Request, call_next):
 
 
 async def exception_handler(request: Request, exc: Exception):
-    alog.error(f'Exception occurred: {exc}')
-    return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={'message': 'Internal Server Error'},
-    )
+    alog.exception({
+        'request': request.url.path,
+        'exception': exc,
+    })

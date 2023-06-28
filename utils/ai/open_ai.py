@@ -24,21 +24,25 @@ def get_text_chunk(text):
 
     # (variable) docs: List[Document]
     docs = [Document(page_content=text) for text in chunks]
+    ic(f'text_chunks are generated and the total chucks are {len(docs)}')
+
     return docs
 
 
-def insert(data) -> Pinecone:
+def insert(data, namespace: str = '', index: str = INDEX_NAME) -> Pinecone:
     embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDINGS_LLM)
 
     #   will not to use vector in memory today.
     #    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-    # pinecone_db.create_index(INDEX_NAME)
+    pinecone_db.create_index(INDEX_NAME)  # FIXME: create index only once
     # to get more information, you can look at this page
     # https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pinecone
 
     vectorstore = pinecone_db.insert(
-        data,
-        embeddings,
+        data=data,
+        embeddings=embeddings,
+        namespace=namespace,
+        index=index,
     )
     return vectorstore
 
