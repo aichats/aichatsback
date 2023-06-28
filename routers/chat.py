@@ -141,7 +141,6 @@ async def upload_v2(chat_id: str, file: UploadFile):  # FIX backport v1
             e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
         )()
 
-
-router.post('/')(create_v1)
-router.get('/{chat_id}')(get_chat_v1)
-router.put('/{chat_id}/upload')(upload_v1)
+# router.post('/')(create_v1)
+# router.get('/{chat_id}')(get_chat_v1)
+# router.put('/{chat_id}/upload')(upload_v1)
