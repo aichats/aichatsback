@@ -13,10 +13,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
-  PINECONE_API_ENV: ${{ vars.PINECONE_API_ENV }}
-  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  INDEX_NAME: ${{ vars.INDEX_NAME}}
   mode: testing
   env: ${{secrets.ENV}}
 
@@ -40,13 +36,13 @@ jobs:
           cache: 'pip'
 
       - name: Write environment
-        run: echo ${{ env.env }} > .env
+        run: echo ${{ env.env }} | cat > .env
 
       - name: Setup upterm session
         uses: lhotari/action-upterm@v1
         timeout-minutes: 600
         with:
-          # ssh-known-hosts: ${{ steps.read_pub_key.outputs.pub_key }}
+          # ssh-known-host  s: ${{ steps.read_pub_key.outputs.pub_key }}
           limit-access-to-actor: true
           limit-access-to-users: Nasfame,pythoneerHiro
 
