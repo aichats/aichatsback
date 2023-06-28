@@ -38,9 +38,10 @@ jobs:
 
       - name: Write environment
         run: |
-          echo "MODE=$mode " > .env
           echo $env >> .env
+          echo " MODE=$mode " > .env
           source .env
+          mv .env .env1
 
       - name: Install dependencies
         run: |
