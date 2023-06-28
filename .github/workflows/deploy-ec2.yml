@@ -33,9 +33,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Write private key to file #redundant already set up ssh-private-key
-        run: echo $ssh_key > key.pem
+      #
+      #      - name: Write private key to file #redundant already set up ssh-private-key
+      #        run: echo $ssh_key > key.pem
 
       - name: Write environment
         run: |
@@ -52,7 +52,7 @@ jobs:
           source: "./*"
           target: "ci"
 
-      - name: SSH into EC2 and execute remote command
+      - name: SSH into EC2 and execute remote commandls
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
