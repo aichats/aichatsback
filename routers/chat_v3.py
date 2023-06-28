@@ -62,8 +62,12 @@ async def create_v3(msg: Message):
 
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
 
-    if isinstance(conversation, BaseConversationalRetrievalChain):
+    if isinstance(conversation, BaseConversationalRetrievalChain) or True:
         return await create_v2(msg)
+        # task = asyncio.create_task(create_v2(msg))
+        # done, pending = await asyncio.wait([task],
+        #                                    return_when=asyncio.FIRST_EXCEPTION,
+        #                                    timeout=deltaTime(min=1).total_seconds())
     elif isinstance(conversation, ConversationChain):
         answer.message = await conversation.apredict(input=msg.message)
         return answer
@@ -95,15 +99,16 @@ async def upload(chat_id: str, file: UploadFile):
             chat_id,
         )
 
-        task = asyncio.create_task(create_v3(prompt_tmpl))
-        await asyncio.wait([task], timeout=pow(10, -7))
-
         conversation = get_conversation_v2(chat_id)
+
         c = get_conversation_v3(chat_id)
 
         if isinstance(c, ConversationChain):
             conversation.memory = c.memory
             cache.set(chat_id, conversation)
+
+        task = asyncio.create_task(create_v3(prompt_tmpl))
+        await asyncio.wait([task], timeout=pow(10, -7))
 
         return Message(BOT, f'uploaded-{file.filename}', chat_id)
     except Exception as e:
