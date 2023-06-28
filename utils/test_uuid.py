@@ -1,4 +1,4 @@
-from uuid import uuid1, uuid3, uuid4
+from uuid import uuid4
 
 from .uuid import is_valid_uuid
 
