@@ -38,7 +38,7 @@ jobs:
 
       - name: Write environment
         run: |
-          echo $env >> .env
+          echo $env > .env
           echo " MODE=$mode " >> .env
           sed -i 's/ /\n/g' .env
 
