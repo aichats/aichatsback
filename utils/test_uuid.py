@@ -13,3 +13,4 @@ def test_is_valid_uuid():
     assert is_valid_uuid(None) is False
     assert is_valid_uuid('null') is False
     assert is_valid_uuid(':id') is False
+    assert is_valid_uuid('{{chat_id}}') is False
