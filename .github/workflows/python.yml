@@ -42,7 +42,7 @@ jobs:
           echo " MODE=$mode " >> .env
           sed -i 's/ /\n/g' .env
           source .env
-          mv .env .env1
+      #          mv .env .env1
 
       - name: Install dependencies
         run: |
@@ -61,6 +61,13 @@ jobs:
         run: |
           python -m pip install pytest
 
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        timeout-minutes: 600
+        with:
+          # ssh-known-hosts: ${{ steps.read_pub_key.outputs.pub_key }}
+          limit-access-to-actor: true
+          limit-access-to-users: Nasfame,pythoneerHiro
       - name: Run tests
         run: |
           make test
