@@ -13,7 +13,7 @@ from langchain.chains.conversational_retrieval.base import (
 )
 from starlette import status
 from utils.ai.open_ai import get_text_chunk, insert
-from utils.chat import get_conversation_chain_v2, resolve_sender
+from utils.chat import get_conversation_v2, resolve_sender
 from utils.inputs import pdf
 from utils.uuid import is_valid_uuid
 
@@ -22,7 +22,7 @@ router = APIRouter(tags=['chat v2'])
 
 @router.post('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: BaseConversationalRetrievalChain = get_conversation_chain_v2(
+    conversation: BaseConversationalRetrievalChain = get_conversation_v2(
         chat_id,
     )
     msgs: List[Message] = []
@@ -43,7 +43,7 @@ async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
 @router.post('/v2')
 async def create_v2(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
-    conversation = get_conversation_chain_v2(msg.chat_id)
+    conversation = get_conversation_v2(msg.chat_id)
     ic(conversation)
     response = conversation({'question': msg.message})
     answer.message = response['answer']
