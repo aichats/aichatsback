@@ -36,19 +36,17 @@ jobs:
       - name: Write private key to file #redundant already set up ssh-private-key
         run: echo ${{ secrets.SSH_PRIVATE_KEY }} > key.pem
 
-      - name: Write environment
-        run: |
-          echo "MODE=$mode\n" > .env
-          echo ${{ env.env }} >> .env
+      #      - name: Write environment
+      #        run: |
+      #          echo "MODE=$mode\n" > .env
+      #          echo ${{ env.env }} >> .env
 
       - name: SSH into EC2 and execute remote command
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ./key.pem
+          key: ./key.
+          env: ${{ env }}
           script: |
-            #            rm -rf deploy
-            #            git clone -b ${{ github.ref }} --single-branch https://github.com/${{ github.repository }}.git deploy
-            #            cd deploy
             sh aichatsback/scripts/deploy.sh

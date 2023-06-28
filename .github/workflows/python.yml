@@ -37,7 +37,9 @@ jobs:
           cache: 'pip'
 
       - name: Write environment
-        run: echo ${{ env.env }} > .env
+        run: |
+          echo "MODE=$mode " > .env
+          echo $env >> .env
 
 
       - name: Setup upterm session
