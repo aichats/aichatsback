@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1cb8b832-1152-4301-905d-88e0fa9dca34",
+		"_postman_id": "c2ac1c9c-ae7b-492a-8f43-aca90142a7f3",
 		"name": "Conversation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "11058592-1cb8b832-1152-4301-905d-88e0fa9dca34"
+		"_uid": "11058592-c2ac1c9c-ae7b-492a-8f43-aca90142a7f3"
 	},
 	"item": [
 		{
@@ -12,7 +12,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a2e61596-2b6d-4892-963a-dc872bdef10f",
+						"id": "c72bcf53-312f-4a14-8f4a-6fc9e7e8f76e",
 						"exec": [
 							"const {sender,message,chat_id} = pm.response.json()",
 							"",
@@ -26,7 +26,7 @@
 					}
 				}
 			],
-			"id": "1d603a22-477d-4f07-a221-181f30a71532",
+			"id": "e517c972-fa4f-4ebe-9e24-878986e650ff",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -55,7 +55,7 @@
 			},
 			"response": [
 				{
-					"id": "0a89f40b-8a83-4984-bcaf-25cc12a5434c",
+					"id": "33f28af8-8dc3-49cc-a9b1-d8910bed0de9",
 					"name": "I am Hiro v1",
 					"originalRequest": {
 						"method": "POST",
@@ -105,8 +105,8 @@
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Hi Hiro, I'm doing great! How about you?\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
 				},
 				{
-					"id": "02e8c7a0-396c-48b1-b503-0d0f18c477f2",
-					"name": "I am Hiro v2",
+					"id": "3e1c3a57-28af-4e31-843d-7d50556371ca",
+					"name": "I am Hiro v2-alpha",
 					"originalRequest": {
 						"method": "POST",
 						"header": [],
@@ -153,6 +153,60 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"Hello Hiro, I'm an AI language model, so I don't have feelings in the way humans do, but I'm here to help you with any questions you have. How can I assist you today?\",\n    \"chat_id\": \"b8c4097d735f4d63ad29422c966d6587\"\n}"
+				},
+				{
+					"id": "22e61f1b-5ee8-4edc-a9da-39a76c73f5c8",
+					"name": "I am Hiro v2-beta",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Hi i am Hiro,Hello, how are you?\",\n  \"chat_id\":null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v2",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Jun 2023 20:38:05 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "186"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"Hello Hiro! I'm an AI assistant, so I don't have feelings, but I'm here to help you. How can I assist you today?\",\n    \"chat_id\": \"fff977984f5e4073aa6b77d117bf7602\"\n}"
 				}
 			]
 		},
@@ -162,7 +216,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "aca4a26f-99e6-445a-bc33-9b7e464630d1",
+						"id": "086665e9-72ff-4cc8-8509-7d3fa799cce7",
 						"exec": [
 							"console.log(\"chat_id\",pm.environment.get(\"chat_id\"))"
 						],
@@ -170,7 +224,7 @@
 					}
 				}
 			],
-			"id": "0cf06957-6cfd-4a25-a9e0-82f03c702eb1",
+			"id": "63d8c9c4-ecc7-4827-b736-7fb1e2461b8f",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -199,7 +253,7 @@
 			},
 			"response": [
 				{
-					"id": "a7cf5fb0-ad62-4536-aed0-a963ab365d57",
+					"id": "122a6171-978d-4caa-94e3-9704a17c79b1",
 					"name": "Conversation Update v1",
 					"originalRequest": {
 						"method": "POST",
@@ -247,12 +301,66 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Hiro is you! You just introduced yourself as Hiro.\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
+				},
+				{
+					"id": "21100b76-f661-4fd6-8008-8f9e129af7dd",
+					"name": "Conversation Update v2-beta",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"who is Hiro?\",\n  \"chat_id\": \"{{chat_id}}\"\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{u}}/chat/v2",
+							"host": [
+								"{{u}}"
+							],
+							"path": [
+								"chat",
+								"v2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.18.0 (Ubuntu)"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 28 Jun 2023 20:39:02 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "185"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"I'm sorry, but without any specific context or additional information, I don't have any information about Hiro.\",\n    \"chat_id\": \"fff977984f5e4073aa6b77d117bf7602\"\n}"
 				}
 			]
 		},
 		{
 			"name": "Chat Get ID",
-			"id": "7ecf06d7-fb5f-4620-9a3b-f98b7df84c82",
+			"id": "e3cfc321-f135-4e63-bac7-ecf03b0e1ba1",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -279,7 +387,7 @@
 			},
 			"response": [
 				{
-					"id": "0a8eef87-8b65-4912-80ec-bc03c8b404ed",
+					"id": "df723cb2-d2fb-41a5-b672-f12a0c98b1a2",
 					"name": "Chat Get ID",
 					"originalRequest": {
 						"method": "GET",
@@ -327,7 +435,7 @@
 					"body": "{\n    \"total\": 4,\n    \"msgs\": [\n        {\n            \"sender\": \"user\",\n            \"message\": \"I am Hiro, I am a golang engineer.\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"bot\",\n            \"message\": \" Hi Hiro, I'm an AI. It's nice to meet you. I'm impressed that you are a golang engineer. What do you like most about working with golang?\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"user\",\n            \"message\": \"who is Hiro?\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        },\n        {\n            \"sender\": \"bot\",\n            \"message\": \" Hiro is the name you just introduced yourself with. You said you are a golang engineer.\",\n            \"chat_id\": \"73b3df71685046e696542fd5cd9d74e1\"\n        }\n    ]\n}"
 				},
 				{
-					"id": "774de809-6f4f-4ee1-a4d0-949cb83b9a67",
+					"id": "e5d529cd-1427-4223-881f-d1eac5861f01",
 					"name": "Chat Get ID",
 					"originalRequest": {
 						"method": "GET",
@@ -378,7 +486,7 @@
 		},
 		{
 			"name": "I need some help",
-			"id": "6de822ab-ceed-4634-8ea8-06c369bbc611",
+			"id": "bb4673f6-0897-4263-baaf-98562eb8ddc5",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -407,7 +515,7 @@
 			},
 			"response": [
 				{
-					"id": "de1705aa-7d2a-49f1-9221-0d1323b02781",
+					"id": "e325adc0-52dc-4cb8-9b86-01c6dd090a4c",
 					"name": "I need some help v1",
 					"originalRequest": {
 						"method": "POST",
@@ -460,7 +568,7 @@
 		},
 		{
 			"name": "I want to see implementations of concurrency",
-			"id": "1dd78a98-dcee-4f8e-88b5-45c6b8e268c1",
+			"id": "0318727e-23da-40b8-bc5b-37c435433769",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -489,7 +597,7 @@
 			},
 			"response": [
 				{
-					"id": "5fd0e3a0-2611-44a1-a409-67157257a041",
+					"id": "be819f18-d7b1-47c7-b12b-94ec10edf0c1",
 					"name": "I want to see implementations of concurrency v1",
 					"originalRequest": {
 						"method": "POST",
@@ -542,7 +650,7 @@
 		},
 		{
 			"name": "Give me a breif description of myself v1",
-			"id": "ddb7d1de-a99e-46f4-8253-3bdc3f99c904",
+			"id": "24f59295-1276-49ee-a302-0b39ade30788",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -571,7 +679,7 @@
 			},
 			"response": [
 				{
-					"id": "51565ca9-9366-4416-a3f8-3778ebaad393",
+					"id": "1cd61648-e53e-4229-9571-fa2fcc197c54",
 					"name": "Give me a breif description of myself v1",
 					"originalRequest": {
 						"method": "POST",
@@ -624,7 +732,7 @@
 		},
 		{
 			"name": "PDF Upload",
-			"id": "18ca1eea-e45f-42eb-bdf8-26703283831a",
+			"id": "00f392bc-544c-4a4d-ab2d-65b2cb75878d",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -674,7 +782,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4b286b49-0155-4a47-a0e0-574589d708ed",
+						"id": "43e9dd00-aa26-4803-839c-197248709c8c",
 						"exec": [
 							""
 						],
@@ -682,7 +790,7 @@
 					}
 				}
 			],
-			"id": "e1fa193f-4169-4e03-b29d-e61c6a9c9093",
+			"id": "6299b1d0-9180-4481-bf4d-57e2f58b9b29",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -711,7 +819,7 @@
 			},
 			"response": [
 				{
-					"id": "d0ea0a89-0813-4a36-858f-d37c2b7f7447",
+					"id": "17293bf1-41dd-4a8b-9d67-d054ef6bbc95",
 					"name": "Specific to pdf-v2",
 					"originalRequest": {
 						"method": "POST",
@@ -768,7 +876,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "b83cd61a-f1ec-4c14-8b2f-b31e9945cb31",
+						"id": "3bfd4ea2-d761-4596-8631-a000ded12fa8",
 						"exec": [
 							"const body = JSON.parse(pm.request.body.raw);",
 							"",
@@ -797,7 +905,7 @@
 					}
 				}
 			],
-			"id": "35d4abf5-5d08-4385-962b-d5e1b04507e1",
+			"id": "1aa2bf08-cba7-43f2-bdcf-a2755861976c",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -826,7 +934,7 @@
 			},
 			"response": [
 				{
-					"id": "d7837243-cf5c-478f-968e-816bc4dc08de",
+					"id": "87ce320f-dddb-45e5-b0e1-46bb198b7021",
 					"name": "Generic and related to pdf",
 					"originalRequest": {
 						"method": "POST",
@@ -879,7 +987,7 @@
 		},
 		{
 			"name": "Are u aware of the document",
-			"id": "ebe7867c-b6f6-4744-aac9-ef77116e5d78",
+			"id": "6e0f7541-5d6c-4e7f-a034-8adc975e71a0",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -908,7 +1016,7 @@
 			},
 			"response": [
 				{
-					"id": "33a69d64-0c10-46d6-91df-50ffb6c09d5a",
+					"id": "5fbd3629-2f7f-4846-a850-cfb30b395070",
 					"name": "v2",
 					"originalRequest": {
 						"method": "POST",

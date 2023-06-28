@@ -1,14 +1,14 @@
 {
 	"info": {
-		"_postman_id": "620c2f77-37f6-4c46-826d-d025413fe3ef",
+		"_postman_id": "443e2f10-385c-4d3d-9adc-4e5f5afa7448",
 		"name": "AIChats",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "11058592-620c2f77-37f6-4c46-826d-d025413fe3ef"
+		"_uid": "11058592-443e2f10-385c-4d3d-9adc-4e5f5afa7448"
 	},
 	"item": [
 		{
 			"name": "Home",
-			"id": "565b457f-35d7-46b7-8219-7a9633ce9513",
+			"id": "5b9d4889-f17c-4d75-b930-512627db3ba7",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -24,7 +24,7 @@
 			},
 			"response": [
 				{
-					"id": "d94918d8-3cad-4a98-a6ef-4e37077a278e",
+					"id": "f6e600eb-860e-4ac0-9ca8-835e3811cb0b",
 					"name": "Root",
 					"originalRequest": {
 						"method": "GET",
@@ -68,7 +68,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5abbcf93-f76a-4482-ac82-376b1405ea38",
+						"id": "6b98aab5-ff26-4619-83a4-b079ff90e39d",
 						"exec": [
 							"let body = pm.response.json()",
 							"",
@@ -86,7 +86,7 @@
 					}
 				}
 			],
-			"id": "14643d82-bff4-4fa3-903c-bc1fe334d6dc",
+			"id": "1a27626f-6de9-4ecd-ac04-ab27a25e467a",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -105,7 +105,7 @@
 			},
 			"response": [
 				{
-					"id": "a2d4a2a7-597b-41ac-b5d1-1db7ed4c8e28",
+					"id": "0732ef75-23ba-4392-a47f-e5b4e9761cb1",
 					"name": "Root",
 					"originalRequest": {
 						"method": "GET",
@@ -145,7 +145,7 @@
 		},
 		{
 			"name": "Cors",
-			"id": "03e886c8-b8b4-4cc0-9703-a8b2bf9dfdbe",
+			"id": "386831ca-0579-4cba-8a2b-68d8e9071a11",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -188,7 +188,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a14cdd1c-7d0d-412a-8213-df2f36c7497f",
+						"id": "b7df21c3-540e-492a-a30f-7820365e53f4",
 						"exec": [
 							"function sendRequest(id,s){",
 							"    console.log(id,s)",
@@ -209,7 +209,7 @@
 					}
 				}
 			],
-			"id": "688fa14e-7795-410d-8e01-da7fb969c21d",
+			"id": "c75e953e-9a31-48ff-91ef-726fa8ad002a",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -238,7 +238,7 @@
 			},
 			"response": [
 				{
-					"id": "f385c9b9-a25c-4927-b772-820258f7e8bb",
+					"id": "ecccc06a-bfb2-49e4-bcb0-81d4a72e02e1",
 					"name": "Chat Create v0",
 					"originalRequest": {
 						"method": "POST",
@@ -287,7 +287,7 @@
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"IndyStar\\n\\nWith the Joe Biden and Kamala Harris win looming, one can only hope that many minds will change. It appears that we may not know the actual outcome of this election for a while yet, and for many, that is concerning. What might be more concerning, however, is that this election has furthered the divide between many Americans.\\n\\nHow will we come together as a nation after such a heated and divisive election?\\n\\nThe battleground states of Wisconsin, Arizona\",\n    \"chat_id\": 1\n}"
 				},
 				{
-					"id": "f1564be5-8399-4a0d-a47d-c1107ba92242",
+					"id": "47466a15-8384-455e-84a8-e7c710db8fd9",
 					"name": "Chat Create v0",
 					"originalRequest": {
 						"method": "POST",
@@ -336,7 +336,7 @@
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"Starlight\\n\\nOne fine day, I looked up and saw the starlight in the sky. All of the stars were twinkling and it was such a beautiful sight. I felt like I could reach out and touch them and I felt so small and insignificant. The starlight had been there for millions of years, but no one had paid attention to it until that moment. I could feel the power of the universe in that moment, and it made me feel so connected to everything. I\",\n    \"chat_id\": \"1\"\n}"
 				},
 				{
-					"id": "84f0b793-608b-4006-86eb-aaa602e0f86c",
+					"id": "a162eb4a-66f0-44b5-95b2-5a09fc414ce5",
 					"name": "Chat Create v1",
 					"originalRequest": {
 						"method": "POST",
@@ -386,7 +386,7 @@
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \" Hi Hiro, it's nice to meet you. I'm an AI and I'm interested in learning more about Golang engineering. Can you tell me more about it?\",\n    \"chat_id\": \"03c5d673753743c8b38f30da9b58f802\"\n}"
 				},
 				{
-					"id": "8d368e6f-0fbd-45a6-b48c-8383d985b600",
+					"id": "b5a521bc-5258-420d-82ae-62a1a23ae769",
 					"name": "Chat Create v2",
 					"originalRequest": {
 						"method": "POST",
@@ -439,7 +439,7 @@
 		},
 		{
 			"name": "PDF Upload",
-			"id": "e077604c-bc53-4ce6-a465-07479da8dc52",
+			"id": "cb4af5bc-ed81-4b7a-9cef-7aea583e8a76",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -483,7 +483,7 @@
 			},
 			"response": [
 				{
-					"id": "6be597c8-2cc6-47c3-89bb-753087fbefb6",
+					"id": "77920948-33cd-48e8-a050-fa81230d7a6d",
 					"name": "PDF Upload v0",
 					"originalRequest": {
 						"method": "POST",
@@ -543,7 +543,7 @@
 					"body": "{\n    \"message\": \"Uploaded successfully\",\n    \"chat_id\": 1\n}"
 				},
 				{
-					"id": "2ad73d57-691a-4af2-93c2-9d4634153c77",
+					"id": "40b1901a-6bb6-49c0-b224-3c2939732b11",
 					"name": "PDF Upload v1 Doesnot support inference to chat",
 					"originalRequest": {
 						"method": "PUT",
@@ -604,7 +604,7 @@
 					"body": "{\n    \"sender\": \"bot\",\n    \"message\": \"uploaded successfully\",\n    \"chat_id\": \"6bf57d6585cb4a3e85078989bf569051\"\n}"
 				},
 				{
-					"id": "1236d7dc-2342-4a5a-9a96-298846ec5d21",
+					"id": "3cc04397-59d0-431a-a004-a2992a6d1e9f",
 					"name": "PDF Upload v1.1",
 					"originalRequest": {
 						"method": "PUT",
@@ -671,7 +671,7 @@
 					"body": "{\n    \"error\": \"Only pdf files are supported currently\",\n    \"chat_id\": \"3bf5cf7f40564a068db77a89707c5887\",\n    \"status_code\": 400\n}"
 				},
 				{
-					"id": "bcd52488-d6aa-4def-be04-189c6dc47645",
+					"id": "d9f015cd-55ea-4b17-bec3-57b0ae6d60df",
 					"name": "PDF Upload v2",
 					"originalRequest": {
 						"method": "PUT",
@@ -741,7 +741,7 @@
 		},
 		{
 			"name": "Healthcheck http",
-			"id": "86bdbcf5-20bb-4a79-b338-3b4945081c50",
+			"id": "192a29c3-31d8-47a2-bf84-0eb781245003",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -763,7 +763,7 @@
 		},
 		{
 			"name": "Healthcheck https",
-			"id": "f9f5650d-9571-4248-a9c1-d87e2a73682c",
+			"id": "7dae30f2-27be-4da7-b0da-5fad2124fca0",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -781,7 +781,7 @@
 		},
 		{
 			"name": "Get Chat",
-			"id": "9244d66f-318f-4f05-9af2-ea03602d3292",
+			"id": "5e66c205-95cc-4288-837a-27176dead198",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -810,7 +810,7 @@
 		},
 		{
 			"name": "Create Chat",
-			"id": "77babde9-e95f-4c05-979a-1fa3114ade85",
+			"id": "b220c70d-8459-4081-aa81-2546b0e7ba6b",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -819,7 +819,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"sender\": \"user\",\n  \"message\": \"Which go version is used in the pdf?\",\n  \"chat_id\": \"{{chat_id}}\"\n}",
+					"raw": "{\"sender\":\"user\",\"message\":\"\\n\",\"chat_id\":\"771f4319-86a1-407c-9f6d-0a0f95f554a2\"}",
 					"options": {
 						"raw": {
 							"language": "json"
