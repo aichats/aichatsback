@@ -108,12 +108,13 @@ async def upload_v1(chat_id: str, file: UploadFile):  # TODO: support multiple
 @router.put('/{chat_id}/upload/v2')
 async def upload_v2(chat_id: str, file: UploadFile):
     if not is_valid_uuid(chat_id):  # For beginning of new conversation
-        chat_id = uuid4()
+        chat_id = uuid4().hex
 
     if file.content_type != 'application/pdf':
         return ErrorMessage(
             'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
         )()
+
     try:
         data = pdf.extract(file.file)
         # Use loader and data splitter to make a document list

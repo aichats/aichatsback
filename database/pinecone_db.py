@@ -31,7 +31,8 @@ def insert(data: List[Document], embeddings: OpenAIEmbeddings, index=INDEX_NAME,
     return Pinecone.from_documents(
         data, embedding=embeddings,
         index_name=index,
-    )  # TODO: support namespaces based on user
+        namespace=namespace,
+    )
 
 
 @cache
