@@ -15,7 +15,7 @@ from langchain.chains.conversational_retrieval.base import (
     BaseConversationalRetrievalChain,
 )
 from utils.ai.open_ai import get_text_chunk, insert
-from utils.chat import get_chat, get_conversation, resolve_sender
+from utils.chat import get_conversation_chain, get_conversation_chain_v2, resolve_sender
 from utils.inputs import pdf
 from utils.uuid import is_valid_uuid
 
@@ -30,7 +30,7 @@ alog = logging.getLogger('app')
 
 @router.get('/v1/{chat_id}')
 async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: ConversationChain = get_conversation(chat_id)
+    conversation: ConversationChain = get_conversation_chain(chat_id)
     msgs: List[Message] = []
 
     for i, msg in enumerate(conversation.memory.chat_memory.messages):
@@ -42,7 +42,9 @@ async def get_chat_v1(chat_id: str) -> dict[str, list[Message] | int]:
 
 @router.get('/v2/{chat_id}')
 async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
-    conversation: BaseConversationalRetrievalChain = get_chat(chat_id)
+    conversation: BaseConversationalRetrievalChain = get_conversation_chain_v2(
+        chat_id,
+    )
     msgs: List[Message] = []
 
     chat_history: List[
@@ -61,7 +63,7 @@ async def get_chat_v2(chat_id: str) -> dict[str, list[Message] | int]:
 @router.post('/v1')  # release: using conversation chain
 async def create_v1(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
-    conversation: ConversationChain = get_conversation(answer.chat_id)
+    conversation: ConversationChain = get_conversation_chain(answer.chat_id)
     answer.message = conversation.predict(input=msg.message)
     return answer
 
@@ -70,7 +72,7 @@ async def create_v1(msg: Message):
 @router.post('/v2')
 async def create_v2(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
-    conversation = get_chat(msg.chat_id)
+    conversation = get_conversation_chain_v2(msg.chat_id)
     ic(conversation)
     response = conversation({'question': msg.message})
     answer.message = response['answer']

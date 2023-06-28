@@ -31,7 +31,7 @@ def resolve_sender(msg) -> str:
 
 
 @cache
-def get_conversation(chat_id: str) -> ConversationChain:
+def get_conversation_chain(chat_id: str) -> ConversationChain:
     # conversation = cache.get(chat_id)
     # if conversation is not None: return conversation
 
@@ -41,7 +41,7 @@ def get_conversation(chat_id: str) -> ConversationChain:
 
 
 @cache
-def get_chat(chat_id: str) -> BaseConversationalRetrievalChain:
+def get_conversation_chain_v2(chat_id: str) -> BaseConversationalRetrievalChain:
     # from langchain import PromptTemplate
     # TODO:prompt
     # # Define a custom prompt template
