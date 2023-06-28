@@ -1,9 +1,10 @@
+import asyncio
 from typing import List
 from uuid import uuid4
 
 import utils
 from config import alog
-from enums import BOT, ErrorMessage, Message
+from enums import BOT, ErrorMessage, Message, USER
 
 from fastapi import APIRouter, UploadFile
 from langchain import ConversationChain, OpenAI
@@ -18,7 +19,7 @@ from utils.inputs import pdf
 from utils.Time import deltaTime
 from utils.uuid import is_valid_uuid
 
-from routers.chat_v2 import upload_v2
+from routers.chat_v2 import create_v2, upload_v2
 
 router = APIRouter(tags=['chat', 'v3'])
 cache = Cache(
@@ -54,11 +55,17 @@ async def get_chat(chat_id: str) -> dict[str, list[Message] | int]:
 
 
 @router.post('/v3')  # release: using conversation chain
-async def create(msg: Message):
+async def create_v3(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
-    answer.message = conversation.predict(input=msg.message)  # FIXME: apredict
-    return answer
+
+    if isinstance(conversation, BaseConversationalRetrievalChain):
+        return await create_v2(msg)
+    elif isinstance(conversation, ConversationChain):
+        answer.message = await conversation.apredict(input=msg.message)
+        return answer
+    else:
+        raise Exception('Invalid conversation type')
 
 
 @router.put('/{chat_id}/upload/v3')
@@ -67,12 +74,36 @@ async def upload(chat_id: str, file: UploadFile):
         alog.error(__name__, 'invalid chat_id', chat_id)
         chat_id = uuid4().hex
 
-    msg = await upload_v2(chat_id, file)
+    if file.content_type != 'application/pdf':
+        return ErrorMessage(
+            'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
+        )()
 
-    conversation = get_conversation_v2(chat_id)
-    c = get_conversation_v3(chat_id)
+    try:
+        data = pdf.extract(file.file)
+        # Use loader and data splitter to make a document list
+        doc = get_text_chunk(data)
+        # Upsert data to the VectorStore
+        insert(doc, namespace=chat_id)
 
-    if isinstance(c, ConversationChain):
-        c.memory = conversation.memory
+        prompt_tmpl = Message(
+            USER,
+            f"""uploaded a pdf file-{file.filename} which will serve as context for our conversation""",
+            chat_id,
+        )
 
-    return msg
+        task = asyncio.create_task(create_v3(prompt_tmpl))
+        await asyncio.wait([task], timeout=pow(10, -7))
+
+        conversation = get_conversation_v2(chat_id)
+        c = get_conversation_v3(chat_id)
+
+        if isinstance(c, ConversationChain):
+            conversation.memory = c.memory
+            cache.set(chat_id, conversation)
+
+        return Message(BOT, f'uploaded-{file.filename}', chat_id)
+    except Exception as e:
+        return ErrorMessage(
+            e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )()
