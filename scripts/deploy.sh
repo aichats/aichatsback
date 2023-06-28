@@ -1,3 +1,4 @@
+python3 -m pip install -r requirements.txt
 session="app"
 tmux select-pane -t $session:0
 tmux kill-session -t $session
