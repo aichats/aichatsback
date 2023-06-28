@@ -21,8 +21,6 @@ from utils.uuid import is_valid_uuid
 
 router = APIRouter(tags=['chat'])
 
-alog = logging.getLogger('app')
-
 
 # cache = Cache(
 #     maxsize=10000, ttl=deltaTime(min=20).total_seconds(),

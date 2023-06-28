@@ -5,7 +5,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import List
 
-alog = logging.getLogger('app')
+from config import alog
 
 
 def jsonify(obj: dataclasses.dataclass, unwanted_keys: List[str] = []) -> str:

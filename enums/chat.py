@@ -5,15 +5,15 @@ from typing import TypeVar
 from uuid import uuid4
 
 import langchain
+
+from config import alog
 from starlette import status
 from starlette.responses import JSONResponse
-
 from utils.uuid import is_valid_uuid
 
 SENDER = TypeVar('SENDER', str, str)
 BOT: SENDER = 'bot'
 USER: SENDER = 'user'
-alog = logging.getLogger('app')
 
 
 @dataclasses.dataclass

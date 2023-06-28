@@ -1,11 +1,11 @@
 import logging
 
+from config import alog
+
 from fastapi import HTTPException
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-
-alog = logging.getLogger('app')
 
 
 async def log_requests(request: Request, call_next):

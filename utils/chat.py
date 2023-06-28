@@ -3,6 +3,7 @@ from functools import cache
 
 import langchain
 
+from config import alog
 from config.constants import OPENAI_CHAT_MODEL
 from database.pinecone_db import get_vectorstore
 
@@ -14,8 +15,6 @@ from langchain.chains.conversational_retrieval.base import (
 )
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-
-alog = logging.getLogger('app')
 
 
 def resolve_sender(msg) -> str:
