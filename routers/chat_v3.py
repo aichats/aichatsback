@@ -62,15 +62,15 @@ async def create_v3(msg: Message):
 
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
 
-    if isinstance(conversation, BaseConversationalRetrievalChain) or True:
+    if isinstance(conversation, ConversationChain):
+        answer.message = await conversation.apredict(input=msg.message)
+        return answer
+    elif isinstance(conversation, BaseConversationalRetrievalChain):
         return await create_v2(msg)
         # task = asyncio.create_task(create_v2(msg))
         # done, pending = await asyncio.wait([task],
         #                                    return_when=asyncio.FIRST_EXCEPTION,
         #                                    timeout=deltaTime(min=1).total_seconds())
-    elif isinstance(conversation, ConversationChain):
-        answer.message = await conversation.apredict(input=msg.message)
-        return answer
     else:
         raise ValueError('Invalid conversation type')
 
