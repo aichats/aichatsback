@@ -64,21 +64,26 @@ async def create_v3(msg: Message):
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
 
     if isinstance(conversation, ConversationChain):  # FIXME remove
+        task.cancel('invalid task')
         answer.message = conversation.predict(input=msg.message)
         return answer
     elif isinstance(conversation, BaseConversationalRetrievalChain):
-        # return await create_v2(msg) #TODO: fixme
-        # done, pending = await asyncio.wait(
-        #     [task],
-        #     return_when=asyncio.FIRST_COMPLETED,
-        #
-        #     timeout=deltaTime(min=1).total_seconds(),
-        # )
-        # TODO: timeout vary
-        done = await asyncio.wait_for(task, deltaTime(min=.5).total_seconds())
+        try:
+            done = await asyncio.wait_for(task, deltaTime(min=.5).total_seconds())
+        except asyncio.TimeoutError:
+            return ErrorMessage(
+                'Gave up waiting, task canceled', msg.chat_id, status.HTTP_408_REQUEST_TIMEOUT,
+            )
+        except Exception as e:
+            return ErrorMessage(
+                e, msg.chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )()
         return done
     else:
-        raise ValueError('Invalid conversation type')
+        task.cancel('invalid task')
+        raise ValueError(
+            f'Invalid conversation chain {conversation.__class__}',
+        )
 
 
 @router.put('/{chat_id}/upload/v3')
@@ -87,36 +92,52 @@ async def upload(chat_id: str, file: UploadFile):
         alog.error(__name__, 'invalid chat_id', chat_id)
         chat_id = uuid4().hex
 
+    task = asyncio.create_task(upload_v2(chat_id, file))
+
     if file.content_type != 'application/pdf':
+        task.cancel('invalid task')
         return ErrorMessage(
             'Only pdf files are supported currently', chat_id, status.HTTP_400_BAD_REQUEST,
         )()
 
     try:
-        data = pdf.extract(file.file)
-        # Use loader and data splitter to make a document list
-        doc = get_text_chunk(data)
-        # Upsert data to the VectorStore
-        insert(doc, namespace=chat_id)
+        # data = pdf.extract(file.file)
+        # # Use loader and data splitter to make a document list
+        # doc = get_text_chunk(data)
+        # # Upsert data to the VectorStore
+        # insert(doc, namespace=chat_id)
+        #
+        # prompt_tmpl = Message(
+        #     USER,
+        #     f"""uploaded a pdf file-{file.filename} which will serve as context for our conversation""",
+        #     chat_id,
+        # )
 
-        prompt_tmpl = Message(
-            USER,
-            f"""uploaded a pdf file-{file.filename} which will serve as context for our conversation""",
-            chat_id,
-        )
+        # conversation = get_conversation_v2(chat_id)
+        #
+        # c = get_conversation_v3(chat_id)
+        #
+        # if isinstance(c, ConversationChain):
+        #     # conversation.memory = c.memory #FIXME: trouble code
+        #     cache.set(chat_id, conversation)
+        #
+        # task = asyncio.create_task(create_v3(prompt_tmpl))
+        # await asyncio.wait([task], timeout=pow(10, -7))
 
-        conversation = get_conversation_v2(chat_id)
+        try:
+            done = await asyncio.wait_for(task, deltaTime(min=.5).total_seconds())
+        except asyncio.TimeoutError:
+            return ErrorMessage(
+                'Gave up waiting, task canceled', chat_id, status.HTTP_408_REQUEST_TIMEOUT,
+            )
+        except Exception as e:
+            return ErrorMessage(
+                e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )()
 
-        c = get_conversation_v3(chat_id)
+        cache.set(done.chat_id, get_conversation_v2(done.chat_id))
+        return done
 
-        if isinstance(c, ConversationChain):
-            # conversation.memory = c.memory #FIXME: trouble code
-            cache.set(chat_id, conversation)
-
-        task = asyncio.create_task(create_v3(prompt_tmpl))
-        await asyncio.wait([task], timeout=pow(10, -7))
-
-        return Message(BOT, f'uploaded-{file.filename}', chat_id)
     except Exception as e:
         return ErrorMessage(
             e, chat_id, status.HTTP_422_UNPROCESSABLE_ENTITY,
