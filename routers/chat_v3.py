@@ -59,21 +59,23 @@ async def get_chat(chat_id: str) -> dict[str, list[Message] | int]:
 @router.post('/v3')  # release: using conversation chain
 async def create_v3(msg: Message):
     answer = Message(BOT, None, msg.chat_id)
+    task = asyncio.create_task(create_v2(msg))
 
     conversation: ConversationChain = get_conversation_v3(answer.chat_id)
 
-    if isinstance(conversation, ConversationChain):
-        answer.message = await conversation.apredict(input=msg.message)
+    if isinstance(conversation, ConversationChain):  # FIXME remove
+        answer.message = conversation.predict(input=msg.message)
         return answer
     elif isinstance(conversation, BaseConversationalRetrievalChain):
         # return await create_v2(msg) #TODO: fixme
-        task = asyncio.create_task(create_v2(msg))
-        done, pending = await asyncio.wait(
-            [task],
-            return_when=asyncio.FIRST_EXCEPTION,
-            timeout=deltaTime(min=1).total_seconds(),
-        )
-
+        # done, pending = await asyncio.wait(
+        #     [task],
+        #     return_when=asyncio.FIRST_COMPLETED,
+        #
+        #     timeout=deltaTime(min=1).total_seconds(),
+        # )
+        # TODO: timeout vary
+        done = await asyncio.wait_for(task, deltaTime(min=.5).total_seconds())
         return done
     else:
         raise ValueError('Invalid conversation type')
