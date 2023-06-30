@@ -5,7 +5,7 @@ on:
     branches:
       - main #FIXME: remove after testing
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 concurrency:
