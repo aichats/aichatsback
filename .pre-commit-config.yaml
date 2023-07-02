@@ -3,12 +3,26 @@ repos:
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
+        args: [ --markdown-linebreak-ext=md ]
       - id: end-of-file-fixer
       - id: check-yaml
       - id: debug-statements
       - id: double-quote-string-fixer
       - id: name-tests-test
       - id: requirements-txt-fixer
+      - id: check-json
+      - id: check-case-conflict
+      - id: check-ast #valid python
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: no-commit-to-branch
+        args: [ --branch, master, --branch, main ]
+      - id: pretty-format-json
+        args: [ '--indent', '2', '--autofix' ]
+      - id: check-docstring-first
+
+
+
 
   - repo: https://github.com/asottile/add-trailing-comma
     rev: v2.5.1
