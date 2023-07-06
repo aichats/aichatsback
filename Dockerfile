@@ -1,4 +1,4 @@
-FROM python:3.10 AS builder
+FROM python:3.11 AS builder
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN . venv/bin/activate
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 ENV mode=production
 ENV PINECONE_API_KEY=""
@@ -17,8 +17,9 @@ ENV OPENAI_API_KEY=""
 ENV OPENAI_EMBEDDINGS_LLM=text-embedding-ada-002
 ENV OPENAI_CHAT_MODEL=gpt-3.5-turbo
 ENV INDEX_NAME=aichat
+ENV PORT=80
 
-EXPOSE 1605
+EXPOSE 80
 
 WORKDIR /app
 
@@ -31,4 +32,4 @@ RUN if [ "$mode" = "testing" ]; then pip install -r requirements-test.txt; fi
 
 COPY . .
 
-ENTRYPOINT ["python","-m","uvicorn", "app:app", "--host", "0.0.0.0", "--port", "1605","--workers","4"]
+ENTRYPOINT ["python","-m","uvicorn", "app:app", "--host", "0.0.0.0", "--port", "$PORT","--workers","4"]
