@@ -10,6 +10,10 @@ RUN pip install -r requirements.txt
 
 FROM python:3.11-slim
 
+#only required for railway deployment
+ARG RAILWAY_ENVIRONMENT=""
+ENV RAILWAY_ENVIRONMENT=$RAILWAY_ENVIRONMENT
+
 ENV mode=production
 ENV PINECONE_API_KEY=""
 ENV PINECONE_API_ENV=""
