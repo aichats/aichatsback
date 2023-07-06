@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   opencommit:
-    timeout-minutes: 5
+    timeout-minutes: 3
     name: OpenCommit
     runs-on: ubuntu-latest
     permissions: write-all
@@ -27,6 +27,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: di-sukharev/opencommit@github-action-v1.0.4
+        continue-on-error: true
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,3 +44,8 @@ jobs:
           OCO_EMOJI: true
           OCO_MODEL: gpt-4 #gpt-3.5-turbo
           OCO_LANGUAGE: en
+
+      - name: OpenCommit Failed
+        if: ${{ failure() }}
+        run: |
+          echo "Open commit failed"
