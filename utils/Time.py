@@ -21,9 +21,9 @@ def today():
     return x
 
 
-def deltaTime(min=1, sec=0):
+def deltaTime(min=1, sec=0, hour=0, day=0):
     from datetime import timedelta as td
-    return td(minutes=min, seconds=sec)
+    return td(minutes=min, seconds=sec, days=day, hours=hour)
 
 
 def futureTime(date=today(), min=1):

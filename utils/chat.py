@@ -40,7 +40,7 @@ def get_conversation_chain(chat_id: str) -> ConversationChain:
 
 
 @cache
-def get_conversation_chain_v2(chat_id: str) -> BaseConversationalRetrievalChain:
+def get_conversation_v2(chat_id: str) -> BaseConversationalRetrievalChain:
     # from langchain import PromptTemplate
     # TODO:prompt
     # # Define a custom prompt template

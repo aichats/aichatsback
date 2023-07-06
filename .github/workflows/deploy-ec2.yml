@@ -5,7 +5,7 @@ on:
     branches:
       - main #FIXME: remove after testing
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 concurrency:
@@ -59,6 +59,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            cd ~/ci
+            git reset --hard
+            sudo sh scripts/nginxupdate.sh
+
             python3 -m pip install -r requirements.txt
             session="app"
             tmux select-pane -t $session:0
@@ -67,3 +71,11 @@ jobs:
             tmux select-pane -t $session:0
             command="python3 -m uvicorn app:app --port 1605 "
             tmux send-keys "$command" Enter
+
+
+            #            tmux split-window -v -t $session:0
+            #            tmux select-pane -t $session:1
+            #            command="sudo sh scripts/nginxupdate.sh"
+            #            tmux send-keys "$command" Enter
+            #            tmux attach-session -t $session
+            #            tmux detach-client

@@ -2,9 +2,9 @@ name: Python
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
   workflow_dispatch:
 
@@ -16,15 +16,14 @@ env:
   mode: testing
   env: ${{secrets.ENV}}
 
-
 jobs:
   build:
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
-        os: [ ubuntu-latest ]
-        python-version: [ "3.11" ]
+        os: [ubuntu-latest]
+        python-version: ["3.11"]
 
     runs-on: ${{matrix.os}}
 
@@ -34,7 +33,7 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          cache: "pip"
 
       - name: Write environment
         run: |
