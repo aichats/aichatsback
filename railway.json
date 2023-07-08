@@ -8,7 +8,7 @@
     "healthcheckPath": "/health",
     "healthcheckTimeout": 996,
     "numReplicas": 1,
-    "restartPolicyMaxRetries": 10,
+    "restartPolicyMaxRetries": 1,
     "restartPolicyType": "ON_FAILURE"
   }
 }
