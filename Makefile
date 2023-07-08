@@ -50,7 +50,7 @@ clean:
 docker:
 	@echo "docker building"
 	@docker build . -t aichats
-	@docker run -p 80:1605  aichats
+	@docker run -p 80:8080  aichats
 
 compose:
 	@docker-compose up --build --force-recreate
