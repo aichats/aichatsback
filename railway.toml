@@ -8,7 +8,6 @@ healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
 numReplicas = 1
-healthcheckTimeout = 996
 restartPolicyMaxRetries = 1
 
 
