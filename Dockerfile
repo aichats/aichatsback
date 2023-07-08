@@ -23,6 +23,9 @@ ENV OPENAI_CHAT_MODEL=gpt-3.5-turbo
 ENV INDEX_NAME=aichat
 ENV PORT=80
 
+RUN if [ "$RAILWAY_ENVIRONMENT" != "" ]; then echo $RAILWAY_ENVIRONMENT > ".env"; fi
+
+
 EXPOSE 80
 
 WORKDIR /app
