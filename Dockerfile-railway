@@ -17,7 +17,6 @@ ENV RAILWAY_ENVIRONMENT=$RAILWAY_ENVIRONMENT
 ENV PORT=8080
 
 RUN echo $RAILWAY_ENVIRONMENT > ".env"
-RUN cat .env
 
 EXPOSE $PORT
 
@@ -30,6 +29,6 @@ RUN . venv/bin/activate
 
 COPY . .
 
-ENTRYPOINT ["uvicorn", "app:app", "--host", "0.0.0.0", "--port",$PORT,"--workers","4"]
+ENTRYPOINT ["venv/bin/uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]
 
 #https://medium.com/@rupertcarr/deploying-a-spring-boot-api-to-railway-using-maven-and-docker-5c75e7428e90
