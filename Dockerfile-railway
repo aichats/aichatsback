@@ -27,8 +27,10 @@ COPY --from=builder /app/venv /app/venv
 
 RUN . venv/bin/activate
 
+RUN pip install -r requirements.txt
+
 COPY . .
 
-ENTRYPOINT ["venv/bin/uvicorn", "app:app", "--host", "0.0.0.0", "--port", $PORT, "--workers", "4"]
+ENTRYPOINT ["python","-m","uvicorn", "app:app", "--host", "0.0.0.0", "--port", $PORT, "--workers", "4"]
 
 #https://medium.com/@rupertcarr/deploying-a-spring-boot-api-to-railway-using-maven-and-docker-5c75e7428e90
