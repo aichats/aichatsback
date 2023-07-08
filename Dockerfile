@@ -1,4 +1,4 @@
-FROM python:3.11 AS builder
+FROM python:3.10 AS builder
 
 WORKDIR /app
 
@@ -8,8 +8,9 @@ RUN . venv/bin/activate
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
-FROM python:3.11-slim
+FROM python:3.10-slim
 
+LABEL maintainer="Hiro <laciferin@gmail.com>"
 #only required for railway deployment
 ARG RAILWAY_ENVIRONMENT=""
 ENV RAILWAY_ENVIRONMENT=$RAILWAY_ENVIRONMENT
@@ -30,7 +31,7 @@ EXPOSE $PORT
 
 WORKDIR /app
 
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=builder /app/venv /app/venv
 
 RUN . venv/bin/activate
