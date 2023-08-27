@@ -20,7 +20,9 @@ middlewares.setup_middlewares(app)
 app.add_middleware(
     CORSMiddleware,
     # "http://localhost", "http://localhost:8000", "https://localhost", "https://localhost:8000"
-    allow_origins=['*'],  # FIXME: security
+    allow_origins=['http:aichats.surge.sh',
+                   'https:aichats.surge.sh', 'https://aichats.github.io', '*'],
+    # FIXME: security
     allow_credentials=True,  # FIXME: security
     allow_methods=['*'],
     allow_headers=['*'],
